@@ -1,0 +1,34 @@
+HELP.md
+task_manager_back_end/target/
+task_manager_back_end/.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+.mvn/**
+
+### STS ###
+task_manager_back_end/.apt_generated
+task_manager_back_end/.classpath
+task_manager_back_end/.factorypath
+task_manager_back_end/.project
+task_manager_back_end.settings
+task_manager_back_end/.springBeans
+task_manager_back_end/.sts4-cache
+
+### IntelliJ IDEA ###
+task_manager_back_end/.idea/**
+task_manager_back_end/*.iws
+task_manager_back_end/*.iml
+task_manager_back_end/*.ipr
+
+### NetBeans ###
+task_manager_back_end/nbproject/private/
+task_manager_back_end/nbbuild/
+task_manager_back_end/dist/
+task_manager_back_end/nbdist/
+task_manager_back_end/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
