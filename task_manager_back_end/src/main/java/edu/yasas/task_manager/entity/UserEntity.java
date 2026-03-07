@@ -32,7 +32,7 @@ public class UserEntity {
 
     private String email;
 
-    private String role = "user";
+    private String role = "ROLE_USER";
 
     private String password;
 

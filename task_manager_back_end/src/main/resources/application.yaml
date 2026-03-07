@@ -1,3 +1,3 @@
 spring:
   profiles:
-    active: ${ACTIVE_profile}
+    active: ${ACTIVE_PROFILE}
