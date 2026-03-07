@@ -19,4 +19,9 @@ public class UserController {
         return userService.persist(userRequestDto);
     }
 
+    @GetMapping("/test")
+    public String testSecuredEndPoint(){
+        return "this a secured end point";
+    }
+
 }
