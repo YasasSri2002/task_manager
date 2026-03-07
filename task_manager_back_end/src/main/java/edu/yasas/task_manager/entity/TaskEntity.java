@@ -1,7 +1,7 @@
 package edu.yasas.task_manager.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "task")
+@Table(name = "task_table")
 @Setter
 @Getter
 @AllArgsConstructor
