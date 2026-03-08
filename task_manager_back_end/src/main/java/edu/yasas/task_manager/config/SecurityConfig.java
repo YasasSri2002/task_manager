@@ -1,5 +1,6 @@
 package edu.yasas.task_manager.config;
 
+import edu.yasas.task_manager.exceptions.CustomAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 
@@ -41,6 +42,8 @@ public class SecurityConfig {
                 );
         httpSecurity.formLogin(withDefaults());
         httpSecurity.httpBasic(withDefaults());
+        httpSecurity.exceptionHandling(exceptionHandlingConfig ->
+                exceptionHandlingConfig.accessDeniedHandler(new CustomAccessDeniedHandler()));
         return httpSecurity.build();
     }
 
