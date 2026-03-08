@@ -2,15 +2,19 @@ package edu.yasas.task_manager.config;
 
 import edu.yasas.task_manager.exceptions.CustomAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -22,7 +26,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     private String[] publicUrls = {
-            "/api/v1/user/persist"
+            "/api/v1/user/persist",
+            "/authenticate/**"
     };
 
     @Bean
@@ -52,6 +57,17 @@ public class SecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+            UserDetailsService userDetailsService , PasswordEncoder passwordEncoder
+    ){
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(userDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
+
+        return new ProviderManager(authenticationProvider);
+
+    }
 
 
 }
