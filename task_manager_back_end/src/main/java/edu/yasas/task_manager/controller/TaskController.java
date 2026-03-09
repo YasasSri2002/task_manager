@@ -32,9 +32,14 @@ public class TaskController {
         return taskService.getAllByUserId(id);
     }
 
-    @PostMapping("/mark-as-complete")
-    public ResponseEntity<Map<String,String>>markAsComplete(String id){
+    @PutMapping("/mark-as-complete")
+    public ResponseEntity<Map<String,String>>markAsComplete(@RequestParam String id){
         return taskService.markAsCompleted(id);
+    }
+
+    @PutMapping("/mark-as-in-progress")
+    public ResponseEntity<Map<String,String>>markAsInProgress(@RequestParam String id){
+        return taskService.markAsInProgress(id);
     }
 
 }

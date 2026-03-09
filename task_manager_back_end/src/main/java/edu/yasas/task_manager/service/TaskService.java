@@ -16,5 +16,7 @@ public interface TaskService {
 
     ResponseEntity<Map<String,String>>markAsCompleted(String taskId);
 
+    ResponseEntity<Map<String,String>>markAsInProgress(String taskId);
+
 
 }

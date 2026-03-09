@@ -110,4 +110,17 @@ public class TaskServiceImpl implements TaskService {
         return ResponseEntity.ok(
                 Map.of("Success", saved.getTitle() + " Marked as Completed"));
     }
+
+    @Override
+    public ResponseEntity<Map<String, String>> markAsInProgress(String taskId) {
+
+        TaskEntity taskEntity = taskRepository.findById(UUID.fromString(taskId)).orElseThrow(() ->
+                new TaskNotFoundException("Task is not found"));
+        taskEntity.setStatus("IN_PROGRESS");
+
+        TaskEntity saved = taskRepository.save(taskEntity);
+
+        return ResponseEntity.ok(
+                Map.of("Success", saved.getTitle() + " Mark as in progress"));
+    }
 }
