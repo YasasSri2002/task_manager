@@ -11,9 +11,10 @@ import edu.yasas.task_manager.repository.TaskRepository;
 import edu.yasas.task_manager.repository.UserRepository;
 import edu.yasas.task_manager.service.TaskService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -134,5 +135,15 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.deleteById(UUID.fromString(taskId));
 
         return ResponseEntity.ok(Map.of("Success", taskId +" has been deleted"));
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<Map<String, String>> deleteAllTaskOfUserByUserid(String userId) {
+
+        taskRepository.deleteAllByUserEntityId(UUID.fromString(userId));
+
+        return ResponseEntity.ok(Map.of("Success",
+                String.format("All tasks under user %s are deleted ",userId)));
     }
 }

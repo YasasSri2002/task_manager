@@ -47,4 +47,9 @@ public class TaskController {
         return taskService.deleteTask(id);
     }
 
+    @DeleteMapping("/all/by-user/id")
+    public ResponseEntity<Map<String, String>>deleteAllTasksByUserId(@RequestParam String id){
+        return  taskService.deleteAllTaskOfUserByUserid(id);
+    }
+
 }

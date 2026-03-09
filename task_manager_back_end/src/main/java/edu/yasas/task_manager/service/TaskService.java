@@ -20,5 +20,7 @@ public interface TaskService {
 
     ResponseEntity<Map<String, String>> deleteTask(String taskId);
 
+    ResponseEntity<Map<String, String>> deleteAllTaskOfUserByUserid(String userId);
+
 
 }
