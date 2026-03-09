@@ -65,7 +65,7 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public ResponseEntity<TaskResponseDto> persist(TaskRequestDto taskRequestDto) {
+    public ResponseEntity<TaskDto> persist(TaskRequestDto taskRequestDto) {
 
         TaskEntity taskEntity = new TaskEntity();
         taskEntity.setTitle(taskRequestDto.getTitle());
@@ -83,7 +83,7 @@ public class TaskServiceImpl implements TaskService {
 
         TaskEntity saved = taskRepository.save(taskEntity);
 
-        return ResponseEntity.ok(getTaskResponseDto(saved));
+        return ResponseEntity.ok(getTaskDto(saved));
     }
 
     @Override

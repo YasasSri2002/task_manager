@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface TaskService {
 
-    ResponseEntity<TaskResponseDto>persist(TaskRequestDto taskRequestDto);
+    ResponseEntity<TaskDto>persist(TaskRequestDto taskRequestDto);
 
     ResponseEntity<List<TaskDto>>getAllByUserId(String id);
 

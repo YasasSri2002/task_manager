@@ -22,7 +22,7 @@ public class TaskController {
 
     @PostMapping("/persist")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<TaskResponseDto>persist(@RequestBody TaskRequestDto taskRequestDto){
+    public ResponseEntity<TaskDto>persist(@RequestBody TaskRequestDto taskRequestDto){
         return taskService.persist(taskRequestDto);
     }
 
