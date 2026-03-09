@@ -5,6 +5,7 @@ import edu.yasas.task_manager.dto.request.TaskRequestDto;
 import edu.yasas.task_manager.dto.response.TaskResponseDto;
 import edu.yasas.task_manager.entity.TaskEntity;
 import edu.yasas.task_manager.entity.UserEntity;
+import edu.yasas.task_manager.exceptions.task_exceptions.TaskNotFoundException;
 import edu.yasas.task_manager.exceptions.user_exceptions.UserNotFoundException;
 import edu.yasas.task_manager.repository.TaskRepository;
 import edu.yasas.task_manager.repository.UserRepository;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static edu.yasas.task_manager.service.impl.UserServiceImpl.getUserResponseDto;
@@ -71,7 +73,7 @@ public class TaskServiceImpl implements TaskService {
         taskEntity.setDueDate(taskRequestDto.getDueDate());
         taskEntity.setCreatedAt(LocalDate.now());
         taskEntity.setUpdatedAt(LocalDate.now());
-        taskEntity.setStatus("In Progress");
+        taskEntity.setStatus("TODO");
 
         UserEntity userEntity = userRepository.findById(UUID.fromString(taskRequestDto.getUserId()))
                 .orElseThrow(() -> new UserNotFoundException("user has not found"));
@@ -94,5 +96,18 @@ public class TaskServiceImpl implements TaskService {
         allByUserId.forEach(taskEntity -> taskDtoArrayList.add(getTaskDto(taskEntity)));
 
         return ResponseEntity.ok(taskDtoArrayList);
+    }
+
+    @Override
+    public ResponseEntity<Map<String, String>> markAsCompleted(String taskId) {
+
+        TaskEntity taskEntity = taskRepository.findById(UUID.fromString(taskId)).orElseThrow(
+                () -> new TaskNotFoundException("Task is not found"));
+        taskEntity.setStatus("COMPLETED");
+
+        TaskEntity saved = taskRepository.save(taskEntity);
+
+        return ResponseEntity.ok(
+                Map.of("Success", saved.getTitle() + " Marked as Completed"));
     }
 }

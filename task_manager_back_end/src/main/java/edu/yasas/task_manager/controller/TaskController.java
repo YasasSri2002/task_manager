@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +30,11 @@ public class TaskController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<TaskDto>>getAllByUserId(@RequestParam String id){
         return taskService.getAllByUserId(id);
+    }
+
+    @PostMapping("/mark-as-complete")
+    public ResponseEntity<Map<String,String>>markAsComplete(String id){
+        return taskService.markAsCompleted(id);
     }
 
 }

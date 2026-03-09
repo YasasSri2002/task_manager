@@ -1,12 +1,12 @@
 package edu.yasas.task_manager.dto;
 
 
-import edu.yasas.task_manager.entity.TaskEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+
 import java.util.UUID;
 @Data
 @AllArgsConstructor
@@ -25,6 +25,5 @@ public class UserDto {
 
     private String role = "ROLE_USER";
 
-    private String password;
 
 }
