@@ -39,7 +39,17 @@ public class UserServiceImpl implements UserService {
         userResponseDto.setFirstName(userEntity.getFirstName());
         userResponseDto.setLastName(userEntity.getLastName());
         userResponseDto.setUsername(userEntity.getUsername());
-        
+        if(userEntity.getTaskEntityList() != null){
+
+            List<TaskEntity> taskEntityList = userEntity.getTaskEntityList();
+
+            ArrayList<TaskDto> taskDtoArrayList = new ArrayList<>();
+
+            taskEntityList.forEach(taskEntity ->
+                    taskDtoArrayList.add(getTaskDto(taskEntity)));
+
+            userResponseDto.setTaskDtoList(taskDtoArrayList);
+        }
         return userResponseDto;
     }
 
