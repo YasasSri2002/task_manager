@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public UserResponseDto getUserResponseDto(UserEntity userEntity){
+    public static UserResponseDto getUserResponseDto(UserEntity userEntity){
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setId(userEntity.getId());
         userResponseDto.setEmail(userEntity.getEmail());

@@ -29,6 +29,6 @@ public class TaskResponseDto {
 
     private LocalDate updatedAt;
 
-    private UserResponseDto userEntity;
+    private UserResponseDto userResponseDto;
 
 }

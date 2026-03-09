@@ -7,6 +7,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -23,6 +24,7 @@ import java.util.Collections;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Component
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private String[] publicUrls = {
