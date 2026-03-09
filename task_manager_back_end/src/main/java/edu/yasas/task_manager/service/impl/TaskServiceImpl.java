@@ -146,4 +146,30 @@ public class TaskServiceImpl implements TaskService {
         return ResponseEntity.ok(Map.of("Success",
                 String.format("All tasks under user %s are deleted ",userId)));
     }
+
+    @Override
+    public ResponseEntity<TaskDto> updateTaskbyId(String taskId, TaskRequestDto taskRequestDto) {
+
+        TaskEntity taskEntity = taskRepository.findById(UUID.fromString(taskId)).orElseThrow(() ->
+                new TaskNotFoundException(String.format("%s task is not found", taskId)));
+
+        if(taskRequestDto.getTitle() != null || !taskRequestDto.getTitle().isEmpty()){
+            taskEntity.setTitle(taskRequestDto.getTitle());
+        }
+        if(taskRequestDto.getDescription() != null || !taskRequestDto.getDescription().isEmpty()){
+            taskEntity.setDescription(taskRequestDto.getDescription());
+        }
+        if(taskRequestDto.getDueDate() != null){
+            taskEntity.setDueDate(taskRequestDto.getDueDate());
+        }
+        if(taskRequestDto.getPriority() != null){
+            taskEntity.setPriority(taskRequestDto.getPriority());
+        }
+
+        taskEntity.setUpdatedAt(LocalDate.now());
+
+        TaskEntity saved = taskRepository.save(taskEntity);
+
+        return ResponseEntity.ok(getTaskDto(saved));
+    }
 }

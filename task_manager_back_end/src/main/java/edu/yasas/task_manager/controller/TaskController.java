@@ -3,6 +3,7 @@ package edu.yasas.task_manager.controller;
 import edu.yasas.task_manager.dto.TaskDto;
 import edu.yasas.task_manager.dto.request.TaskRequestDto;
 import edu.yasas.task_manager.dto.response.TaskResponseDto;
+import edu.yasas.task_manager.entity.TaskEntity;
 import edu.yasas.task_manager.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,12 @@ public class TaskController {
     @DeleteMapping("/all/by-user/id")
     public ResponseEntity<Map<String, String>>deleteAllTasksByUserId(@RequestParam String id){
         return  taskService.deleteAllTaskOfUserByUserid(id);
+    }
+
+    @PutMapping("/update-task")
+    public ResponseEntity<TaskDto>updateTask(
+            @RequestParam String taskId , @RequestBody TaskRequestDto taskRequestDto){
+        return taskService.updateTaskbyId(taskId,taskRequestDto);
     }
 
 }
