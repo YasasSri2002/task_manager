@@ -123,4 +123,16 @@ public class TaskServiceImpl implements TaskService {
         return ResponseEntity.ok(
                 Map.of("Success", saved.getTitle() + " Mark as in progress"));
     }
+
+    @Override
+    public ResponseEntity<Map<String, String>> deleteTask(String taskId) {
+
+        if(!taskRepository.existsById(UUID.fromString(taskId))){
+            throw new TaskNotFoundException("task is not found");
+        }
+
+        taskRepository.deleteById(UUID.fromString(taskId));
+
+        return ResponseEntity.ok(Map.of("Success", taskId +" has been deleted"));
+    }
 }

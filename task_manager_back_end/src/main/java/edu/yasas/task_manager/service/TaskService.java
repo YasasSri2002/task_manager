@@ -18,5 +18,7 @@ public interface TaskService {
 
     ResponseEntity<Map<String,String>>markAsInProgress(String taskId);
 
+    ResponseEntity<Map<String, String>> deleteTask(String taskId);
+
 
 }

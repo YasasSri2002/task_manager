@@ -42,4 +42,9 @@ public class TaskController {
         return taskService.markAsInProgress(id);
     }
 
+    @DeleteMapping("/by-id")
+    public ResponseEntity<Map<String,String>>deleteById(@RequestParam String id){
+        return taskService.deleteTask(id);
+    }
+
 }
