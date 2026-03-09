@@ -13,6 +13,10 @@ jwt:
   secret: ${JWT_SECRET_KEY}
   expiration: ${JWT_EXPIRE_TIME}
 
+springdoc:
+  api-docs:
+    path: /api-docs
+
 
 
 

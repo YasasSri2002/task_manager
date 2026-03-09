@@ -28,6 +28,13 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     private String[] publicUrls = {
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/webjars/**",
+            "/api-docs/**",
+            "/api-docs",
             "/api/v1/user/persist",
             "/authenticate/**"
     };

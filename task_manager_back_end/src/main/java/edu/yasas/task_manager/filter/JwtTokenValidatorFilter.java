@@ -19,7 +19,10 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+
 public class JwtTokenValidatorFilter extends OncePerRequestFilter {
+
+
 
     @Override
     protected void doFilterInternal(
@@ -62,6 +65,7 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+
         return request.getServletPath().equals("/authenticate/login")
                 || request.getServletPath().equals("/api/v1/user/persist");
         //This filter will execute every other scenarios except log in and register
