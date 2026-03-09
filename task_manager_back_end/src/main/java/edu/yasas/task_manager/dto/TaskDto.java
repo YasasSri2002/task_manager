@@ -28,6 +28,5 @@ public class TaskDto {
     private LocalDate updatedAt;
 
 
-    private UserEntity userEntity;
 
 }

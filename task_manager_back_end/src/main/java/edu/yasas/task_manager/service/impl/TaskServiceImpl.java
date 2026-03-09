@@ -1,5 +1,6 @@
 package edu.yasas.task_manager.service.impl;
 
+import edu.yasas.task_manager.dto.TaskDto;
 import edu.yasas.task_manager.dto.request.TaskRequestDto;
 import edu.yasas.task_manager.dto.response.TaskResponseDto;
 import edu.yasas.task_manager.entity.TaskEntity;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static edu.yasas.task_manager.service.impl.UserServiceImpl.getUserResponseDto;
@@ -26,7 +29,7 @@ public class TaskServiceImpl implements TaskService {
 
     private final UserRepository userRepository;
 
-    public TaskResponseDto getTaskResponseDto(TaskEntity taskEntity){
+    public static TaskResponseDto getTaskResponseDto(TaskEntity taskEntity){
         TaskResponseDto taskResponseDto = new TaskResponseDto();
         taskResponseDto.setId(taskEntity.getId());
         taskResponseDto.setStatus(taskEntity.getStatus());
@@ -40,6 +43,23 @@ public class TaskServiceImpl implements TaskService {
 
         return taskResponseDto;
     }
+
+    public static  TaskDto getTaskDto(TaskEntity taskEntity){
+
+        TaskDto taskDto = new TaskDto();
+        taskDto.setId(taskEntity.getId());
+        taskDto.setStatus(taskEntity.getStatus());
+        taskDto.setTitle(taskEntity.getTitle());
+        taskDto.setDescription(taskEntity.getDescription());
+        taskDto.setPriority(taskEntity.getPriority());
+        taskDto.setDueDate(taskEntity.getDueDate());
+        taskDto.setCreatedAt(taskEntity.getCreatedAt());
+        taskDto.setUpdatedAt(taskEntity.getUpdatedAt());
+
+        return taskDto;
+    }
+
+
 
     @Override
     public ResponseEntity<TaskResponseDto> persist(TaskRequestDto taskRequestDto) {
@@ -61,5 +81,18 @@ public class TaskServiceImpl implements TaskService {
         TaskEntity saved = taskRepository.save(taskEntity);
 
         return ResponseEntity.ok(getTaskResponseDto(saved));
+    }
+
+    @Override
+    public ResponseEntity<List<TaskDto>> getAllByUserId(String id) {
+
+        ArrayList<TaskDto> taskDtoArrayList = new ArrayList<>();
+
+        Iterable<TaskEntity> allByUserId =
+                taskRepository.findAllByUserEntityId(UUID.fromString(id));
+
+        allByUserId.forEach(taskEntity -> taskDtoArrayList.add(getTaskDto(taskEntity)));
+
+        return ResponseEntity.ok(taskDtoArrayList);
     }
 }

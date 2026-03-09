@@ -46,7 +46,7 @@ public class SecurityConfig {
                     corsConfiguration.setMaxAge(10L);
                     return  corsConfiguration;
                 }))
-                .addFilterBefore(new JwtTokenValidatorFilter() , BasicAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests(requests ->
                     requests.requestMatchers(publicUrls).permitAll()
                             .anyRequest().authenticated()
