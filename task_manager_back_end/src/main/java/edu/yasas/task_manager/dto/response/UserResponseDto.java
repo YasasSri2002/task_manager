@@ -1,5 +1,6 @@
 package edu.yasas.task_manager.dto.response;
 
+import edu.yasas.task_manager.dto.TaskDto;
 import edu.yasas.task_manager.entity.TaskEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,6 @@ public class UserResponseDto {
     private String email;
 
 
-    private List<TaskEntity> taskEntityList;
+    private List<TaskDto> taskDtoList;
 
 }

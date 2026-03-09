@@ -23,9 +23,8 @@ public class UserDto {
 
     private String email;
 
-    private String role = "user";
+    private String role = "ROLE_USER";
 
     private String password;
 
-    private List<TaskEntity> taskEntityList;
 }

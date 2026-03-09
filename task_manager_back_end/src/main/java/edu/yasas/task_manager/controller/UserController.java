@@ -1,5 +1,6 @@
 package edu.yasas.task_manager.controller;
 
+import edu.yasas.task_manager.dto.UserDto;
 import edu.yasas.task_manager.dto.request.UserRequestDto;
 import edu.yasas.task_manager.dto.response.UserResponseDto;
 import edu.yasas.task_manager.service.UserService;
@@ -19,9 +20,11 @@ public class UserController {
         return userService.persist(userRequestDto);
     }
 
-    @GetMapping("/test")
-    public String testSecuredEndPoint(){
-        return "this a secured end point";
+    @GetMapping("/by-id")
+    public ResponseEntity<UserDto>getById(@RequestParam String id){
+        return userService.getById(id);
     }
+
+
 
 }
