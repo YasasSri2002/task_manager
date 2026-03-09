@@ -3,12 +3,15 @@ package edu.yasas.task_manager.service.impl;
 import edu.yasas.task_manager.dto.request.UserRequestDto;
 import edu.yasas.task_manager.dto.response.UserResponseDto;
 import edu.yasas.task_manager.entity.UserEntity;
+import edu.yasas.task_manager.exceptions.EmailAlreadyExistException;
 import edu.yasas.task_manager.repository.UserRepository;
 import edu.yasas.task_manager.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<UserResponseDto> persist(UserRequestDto userRequestDto) {
+
+        Optional<UserEntity> byEmail =
+                userRepository.findByEmail(userRequestDto.getEmail());
+
+        if(byEmail.isPresent()){
+            throw new EmailAlreadyExistException("This email has been registered before");
+        }
 
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(userRequestDto.getEmail());

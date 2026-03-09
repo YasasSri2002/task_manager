@@ -1,4 +1,4 @@
-package edu.yasas.task_manager.exceptions;
+package edu.yasas.task_manager.exceptions.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
