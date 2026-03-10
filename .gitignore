@@ -67,6 +67,7 @@ task_manager_frontend/.pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
 task_manager_frontend/.env*
+task_manager_frontend/.env.local
 
 # vercel
 task_manager_frontend/.vercel

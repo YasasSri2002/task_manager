@@ -3,16 +3,34 @@ import Link from "next/link";
 import Image from "next/image";
 import { FormEvent, useState } from "react";
 import DynamicIcon from "@/utill/DynamicIcon";
+import { login } from "@/services/login/loginService";
+import { LoginRequestDto } from "@/dto/login";
 
 export default function LoginPage(){
 
     const[isPasswordShowing,setIsPasswordShowing] =useState(false);
-    
+    const[errorMessage,setErrorMessage] = useState<string|null>(null);
 
-    function loginFormSubmit(event: FormEvent<HTMLFormElement>){
+    async function loginFormSubmit(event: FormEvent<HTMLFormElement>){
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        console.log(formData)
+
+        const data: LoginRequestDto ={
+            username: formData.get('email') as string,
+            password: formData.get('password') as string
+        }
+
+        try{
+            setErrorMessage(null)
+            await login(data);
+
+        }catch(error : unknown){
+             if (error instanceof Error) {
+                setErrorMessage(error.message);
+            }
+        }
+
+        
     }
 
 
@@ -37,6 +55,10 @@ export default function LoginPage(){
             </header>
             
                 <form className="grid gap-4 w-full sm:w-md md:w-lg" onSubmit={loginFormSubmit}>
+                    {errorMessage && 
+                        <p className="w-fit px-4 py-1 text-red-600 text-center text-sm bg-red-200 border-rose-500 rounded-sm">
+                        {errorMessage}
+                        </p>}
                     <div className="grid gap-1">
                         <label  htmlFor={"email"}>Email</label>
                         <input type="text" name="email"
