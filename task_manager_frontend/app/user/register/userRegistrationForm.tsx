@@ -1,47 +1,50 @@
-'use client'
-import Link from "next/link";
-import Image from "next/image";
+'use client';
 import { FormEvent, useState } from "react";
+
 import DynamicIcon from "@/utill/DynamicIcon";
 
-export default function LoginPage(){
+export function UserRegistrationForm(){
 
-    const[isPasswordShowing,setIsPasswordShowing] =useState(false);
-    
+    const[isPasswordShowing,setIsPasswordShowing] = useState(false);
 
-    function loginFormSubmit(event: FormEvent<HTMLFormElement>){
-        event.preventDefault();
+    function formSubmit(event: FormEvent<HTMLFormElement>){
+        event.preventDefault()
         const formData = new FormData(event.currentTarget);
-        console.log(formData)
+        console.log(formData);
     }
 
-
     return(
-        <div className="grid justify-items-center content-center h-dvh">
-        <div className="grid justify-items-center w-[18em] md:w-3xl lg:4xl sm:min-w-xl  max-w-7xl  gap-5">
-            <header>
-                <div className="flex items-center justify-center">
-                    <Image src={"/logo.png"}
-                        width={200}
-                        height={100}
-                         alt="logo"
-                        />
-                </div>
-                
-                <h1 className="text-center text-md  md:text-2xl">
-                    Welcome to Task Forge
-                </h1>
-                <h2 className="text-center text-sm md:text-md text-gray-500">
-                    Sign in to your account
-                </h2>
-            </header>
-            
-                <form className="grid gap-4 w-full sm:w-md md:w-lg" onSubmit={loginFormSubmit}>
+        <div className="flex justify-center">
+            <form className="grid gap-4 w-full sm:w-md md:w-lg" onSubmit={formSubmit}>
+                    <div className="grid md:flex md:justify-between md:gap-5 w-full gap-4">
+                        <div className="grid gap-1 md:w-full">
+                            <label  htmlFor={"firstName"}>First name</label>
+                            <input type="text" name="firstName"
+                                className=" border border-gray-600 rounded-md px-2   h-8 sm:h-10  " 
+                                placeholder="Ayrton"
+                                />
+                        </div>
+                        <div className="grid gap-1 md:w-full">
+                            <label  htmlFor={"lastName"}>Last name</label>
+                            <input type="text" name="lastName"
+                                className=" border border-gray-600 rounded-md px-2  h-8  sm:h-10  " 
+                                placeholder="senna"
+                                />
+                        </div>
+                    </div>
+
                     <div className="grid gap-1">
                         <label  htmlFor={"email"}>Email</label>
                         <input type="text" name="email"
                             className=" border border-gray-600 rounded-md px-2  h-8  sm:h-10  " 
                             placeholder="you@example.com"
+                            />
+                    </div>
+                    <div className="grid gap-1">
+                        <label  htmlFor={"username"}>User name</label>
+                        <input type="text" name="username"
+                            className=" border border-gray-600 rounded-md px-2  h-8  sm:h-10  " 
+                            placeholder="Ayrton_Senna_de_silva"
                             />
                     </div>
                     <div className="grid gap-1">
@@ -68,18 +71,9 @@ export default function LoginPage(){
                     <button type="submit" 
                         className="w-full border border-blue-600 bg-blue-600 py-1 px-4 rounded-md text-white 
                         active:scale-75">
-                        Sign in
+                        Register
                     </button>
                 </form>
-
-            <div>
-                <h1>Don&apos;t have an account? 
-                    <span><Link href="/register" 
-                            className="text-blue-700"> Sign up
-                            </Link>
-                    </span></h1>
-            </div>
         </div>
-        </div>
-    );
+    )
 }
