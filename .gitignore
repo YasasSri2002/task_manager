@@ -32,3 +32,46 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+task_manager_frontend/node_modules
+task_manager_frontend/.pnp
+task_manager_frontend/.pnp.*
+task_manager_frontend/.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+task_manager_frontend/coverage
+
+# next.js
+task_manager_frontend/.next/
+task_manager_frontend/out/
+
+# production
+task_manager_frontend/build
+
+# misc
+task_manager_frontend/.DS_Store
+task_manager_frontend/*.pem
+
+# debug
+task_manager_frontend/npm-debug.log*
+task_manager_frontend/yarn-debug.log*
+task_manager_frontend/yarn-error.log*
+task_manager_frontend/.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+task_manager_frontend/.env*
+
+# vercel
+task_manager_frontend/.vercel
+
+# typescript
+task_manager_frontend/*.tsbuildinfo
+task_manager_frontend/next-env.d.ts
+
