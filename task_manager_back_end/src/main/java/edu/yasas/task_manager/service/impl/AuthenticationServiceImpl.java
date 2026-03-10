@@ -1,5 +1,6 @@
 package edu.yasas.task_manager.service.impl;
 
+import edu.yasas.task_manager.config.CustomUserDetail;
 import edu.yasas.task_manager.dto.request.LoginRequestDto;
 import edu.yasas.task_manager.dto.response.LoginResponseDto;
 import edu.yasas.task_manager.service.AuthenticationService;
@@ -39,10 +40,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new BadCredentialsException("Bad Credentials");
         }
 
+        CustomUserDetail userDetail = (CustomUserDetail) authResponse.getPrincipal();
+
         String token = "Bearer " +  jwtTokenProvider.generateToken(authResponse);
+
+        assert userDetail != null;
 
         return ResponseEntity.ok()
                 .header("Authorization",token)
-                .body(new LoginResponseDto(HttpStatus.OK.getReasonPhrase(),token));
+                .body(new LoginResponseDto(HttpStatus.OK.getReasonPhrase(),token,userDetail.getUserId()));
     }
 }
