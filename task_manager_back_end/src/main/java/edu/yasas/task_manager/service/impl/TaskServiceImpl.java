@@ -176,4 +176,13 @@ public class TaskServiceImpl implements TaskService {
 
         return ResponseEntity.ok(getTaskDto(saved));
     }
+
+    @Override
+    public ResponseEntity<List<TaskResponseDto>> getAllTasks() {
+        ArrayList<TaskResponseDto> taskResponseDtoArrayList = new ArrayList<>();
+        List<TaskEntity> taskEntityList = taskRepository.findAll();
+        taskEntityList.forEach(taskEntity ->
+                taskResponseDtoArrayList.add(getTaskResponseDto(taskEntity)));
+        return ResponseEntity.ok(taskResponseDtoArrayList);
+    }
 }

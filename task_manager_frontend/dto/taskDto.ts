@@ -1,4 +1,5 @@
 import { TaskPriority, TaskStatus } from "@/types/task";
+import { UserResponseDto } from "./user";
 
 export interface TaskResponseDto{
     
@@ -17,6 +18,8 @@ export interface TaskResponseDto{
     createdAt: Date;
 
     updatedAt: Date;
+
+    userResponseDto? : UserResponseDto;
 }
 
 export interface TaskRequestDto{

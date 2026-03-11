@@ -4,6 +4,7 @@ import edu.yasas.task_manager.dto.TaskDto;
 import edu.yasas.task_manager.dto.request.TaskRequestDto;
 import edu.yasas.task_manager.dto.response.TaskResponseDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.config.Task;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,8 @@ public interface TaskService {
     ResponseEntity<Map<String, String>> deleteAllTaskOfUserByUserid(String userId);
 
     ResponseEntity<TaskDto> updateTaskbyId(String taskId, TaskRequestDto taskRequestDto);
+
+    ResponseEntity<List<TaskResponseDto>>getAllTasks();
 
 
 }

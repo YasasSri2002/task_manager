@@ -58,5 +58,9 @@ public class TaskController {
             @RequestParam String taskId , @RequestBody TaskRequestDto taskRequestDto){
         return taskService.updateTaskbyId(taskId,taskRequestDto);
     }
+    @GetMapping("/all")
+    public ResponseEntity<List<TaskResponseDto>>getAllTask(){
+        return taskService.getAllTasks();
+    }
 
 }
