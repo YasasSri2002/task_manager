@@ -6,6 +6,7 @@ import edu.yasas.task_manager.dto.response.UserResponseDto;
 import edu.yasas.task_manager.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,6 +24,12 @@ public class UserController {
     @GetMapping("/by-id")
     public ResponseEntity<UserDto>getById(@RequestParam String id){
         return userService.getById(id);
+    }
+
+    @PostMapping("/register/admin")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    public ResponseEntity<UserDto>registerAdmin(@RequestBody UserRequestDto userRequestDto){
+        return userService.registerAdmin(userRequestDto);
     }
 
 

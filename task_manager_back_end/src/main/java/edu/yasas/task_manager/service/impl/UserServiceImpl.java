@@ -16,6 +16,7 @@ import edu.yasas.task_manager.repository.UserRepository;
 import edu.yasas.task_manager.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -65,9 +66,7 @@ public class UserServiceImpl implements UserService {
         return userDto;
     }
 
-    @Override
-    public ResponseEntity<UserResponseDto> persist(UserRequestDto userRequestDto) {
-
+    private UserEntity getUserEntity(UserRequestDto userRequestDto, String role){
         Optional<UserEntity> byEmail =
                 userRepository.findByEmail(userRequestDto.getEmail());
 
@@ -81,9 +80,17 @@ public class UserServiceImpl implements UserService {
         userEntity.setLastName(userRequestDto.getLastName());
         userEntity.setUsername(userRequestDto.getUsername());
         userEntity.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        RolesEntity role = rolesRepository.findByName("ROLE_USER")
+        RolesEntity userRole = rolesRepository.findByName(role)
                 .orElseThrow(() -> new RoleNotFoundException("Role not found"));
-        userEntity.setAuthorities(Set.of(role));
+        userEntity.setAuthorities(Set.of(userRole));
+
+        return userEntity;
+    }
+
+    @Override
+    public ResponseEntity<UserResponseDto> persist(UserRequestDto userRequestDto) {
+
+        UserEntity userEntity = getUserEntity(userRequestDto,"ROLE_USER");
         UserEntity savedEntity = userRepository.save(userEntity);
 
         return ResponseEntity.ok(getUserResponseDto(savedEntity));
@@ -96,5 +103,14 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException("User has been not found"));
 
         return ResponseEntity.ok(getUserDto(userEntity));
+    }
+
+    @Override
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    public ResponseEntity<UserDto> registerAdmin(UserRequestDto userRequestDto) {
+        UserEntity adminEnity = getUserEntity(userRequestDto, "ROLE_ADMIN");
+        UserEntity save = userRepository.save(adminEnity);
+
+        return ResponseEntity.ok(getUserDto(save));
     }
 }
