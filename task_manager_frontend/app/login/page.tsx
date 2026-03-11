@@ -4,12 +4,16 @@ import Image from "next/image";
 import { FormEvent, useState } from "react";
 import DynamicIcon from "@/utill/DynamicIcon";
 import { login } from "@/services/login/loginService";
-import { LoginRequestDto } from "@/dto/login";
+import { LoginRequestDto, LoginResponseDto } from "@/dto/login";
+import { jwtDecode } from "jwt-decode";
+import { DecodedToken } from "../types/decodedToken";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage(){
 
     const[isPasswordShowing,setIsPasswordShowing] =useState(false);
     const[errorMessage,setErrorMessage] = useState<string|null>(null);
+    const router = useRouter();
 
     async function loginFormSubmit(event: FormEvent<HTMLFormElement>){
         event.preventDefault();
@@ -22,7 +26,30 @@ export default function LoginPage(){
 
         try{
             setErrorMessage(null)
-            await login(data);
+            const result: LoginResponseDto = await login(data);
+            let { token} = result;
+            const{ userId} =result;
+
+             if (!token) throw new Error("No jwtToken returned");
+
+            // Remove "Bearer " prefix if present
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+
+            // Decode JWT to get roles
+            const decoded: DecodedToken = jwtDecode(token);
+            const roles = decoded.authorities.split(",").map(r => r.trim());
+
+            // Redirect based on role
+            if (roles.includes("ROLE_SUPER_ADMIN")) {
+                router.push(`/super-admin/dashboard/${userId}`);
+            } else if (roles.includes("ROLE_USER")) {
+                router.push(`/user/${userId}/dashboard/`);
+            } else {
+                router.push("/unauthorized");
+            }
+
 
         }catch(error : unknown){
              if (error instanceof Error) {

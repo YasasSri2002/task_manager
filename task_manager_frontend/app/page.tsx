@@ -3,8 +3,8 @@ import LoginPage from "./login/page";
 
 export default function Home() {
   return (
-    <main>
-      <LoginPage/>
-    </main>
+   <div className="grid">
+    <h1>Task Forge</h1>
+   </div>
   );
 }
