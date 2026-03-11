@@ -266,8 +266,8 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
       setShowTaskForm(false);
       setTaskToEdit(undefined);
 
-    } catch (err) {
-      Swal.fire('Error', 'Operation failed', 'error');
+    } catch{
+      Swal.fire('Error', `Operation failed`, 'error');
     }
   };
 

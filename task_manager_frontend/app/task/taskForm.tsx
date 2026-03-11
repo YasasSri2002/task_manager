@@ -93,7 +93,8 @@ export default function TaskForm({ task, onSubmit, onCancel }: TaskFormProps) {
               required
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm min-h-[100px] resize-none"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 
+              focus:ring-blue-500 text-sm min-h-25 resize-none"
               placeholder="Enter task description"
             />
           </div>
@@ -107,7 +108,8 @@ export default function TaskForm({ task, onSubmit, onCancel }: TaskFormProps) {
                 id="status"
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value as TaskStatus })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 
+                focus:ring-blue-500 text-sm"
               >
                 <option value="TODO">To Do</option>
                 <option value="IN_PROGRESS">In Progress</option>
@@ -123,7 +125,8 @@ export default function TaskForm({ task, onSubmit, onCancel }: TaskFormProps) {
                 id="priority"
                 value={formData.priority}
                 onChange={(e) => setFormData({ ...formData, priority: e.target.value as TaskPriority })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 
+                focus:ring-blue-500 text-sm"
               >
                 <option value="LOW">Low</option>
                 <option value="MEDIUM">Medium</option>
