@@ -125,17 +125,32 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
   };
 
   const handleMarkComplete = async (id: string) => {
+    const confirm = await Swal.fire({
+      title: 'Complete?',
+      icon: 'question',
+      showCancelButton: true
+    });
+    if(!confirm.isConfirmed) return;
+    await markTaskAsInProgressById(id);
     await markTaskAsCompletedById(id);
     setTaskList(prev =>
       prev.map(t => t.id === id ? { ...t, status: 'COMPLETED' } : t)
     );
+    Swal.fire('Completed!', '', 'success');
   };
 
   const handleMarkInProgress = async (id: string) => {
+    const confirm = await Swal.fire({
+      title: 'In Progress?',
+      icon: 'question',
+      showCancelButton: true
+    });
+    if(!confirm.isConfirmed) return;
     await markTaskAsInProgressById(id);
     setTaskList(prev =>
       prev.map(t => t.id === id ? { ...t, status: 'IN_PROGRESS' } : t)
     );
+    Swal.fire('Completed!', '', 'success');
   };
 
   const handleEditTask = (task: TaskResponseDto) => {
@@ -148,12 +163,50 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
     try {
 
       if (taskToEdit) {
+        Swal.fire({
+            title: 'Saving...',
+            text: 'Processing....',
+            allowOutsideClick: false,
+            background: '#fff',
+            color: '#000000',
+            didOpen: () => {
+              Swal.showLoading();
+          }
+        });
+        try{
+          
+          const updated = await updateTaskById(taskToEdit.id, data);
+          Swal.close();
+          setTaskList(prev =>
+            prev.map(t => (t.id === taskToEdit.id ? updated : t))
+          );
+          await Swal.fire({
+              icon: 'success',
+              title: 'Successful!',
+              background: '#fff',
+              color: '#000000',
+              timer: 3500,
+              timerProgressBar: true,
+              customClass: {
+                popup: 'border border-gray-700'
+              }
+            });
 
-        const updated = await updateTaskById(taskToEdit.id, data);
-
-        setTaskList(prev =>
-          prev.map(t => (t.id === taskToEdit.id ? updated : t))
-        );
+        }catch(err:unknown){
+          if(err instanceof Error){
+              Swal.fire({
+              icon: 'error',
+              title: `Save Failed`,
+              text: err instanceof Error ? err.message : 'An unexpected error occurred.',
+              background: '#fff',
+              color: '#000000',
+              confirmButtonColor: '#dc2626',
+              customClass: {
+                popup: 'border border-gray-700'
+              }
+            });
+          }
+        }
 
       } else {
 
