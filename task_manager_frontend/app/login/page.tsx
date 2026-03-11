@@ -8,20 +8,36 @@ import { LoginRequestDto, LoginResponseDto } from "@/dto/login";
 import { jwtDecode } from "jwt-decode";
 import { DecodedToken } from "../../types/decodedToken";
 import { useRouter } from "next/navigation";
+import { LoginFormErrors, loginFormValidateSchema } from "@/lib/schema/loginFormValidateSchema";
 
 export default function LoginPage(){
 
     const[isPasswordShowing,setIsPasswordShowing] =useState(false);
     const[errorMessage,setErrorMessage] = useState<string|null>(null);
+    const[inputValidationError,setInpuValidationError]= useState<LoginFormErrors>({});
     const router = useRouter();
 
     async function loginFormSubmit(event: FormEvent<HTMLFormElement>){
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
 
-        const data: LoginRequestDto ={
+        const formValues ={
             username: formData.get('email') as string,
             password: formData.get('password') as string
+        }
+
+        const result = loginFormValidateSchema.safeParse(formValues);
+
+         if (!result.success) {
+            setInpuValidationError(result.error.flatten().fieldErrors);
+            return; // Stop here, don't call the API
+        }
+
+            setInpuValidationError({})
+
+        const data: LoginRequestDto ={
+            username: result.data.username,
+            password: result.data.password
         }
 
         try{
@@ -94,6 +110,8 @@ export default function LoginPage(){
                             className=" border border-gray-600 rounded-md px-2  h-8  sm:h-10  " 
                             placeholder="you@example.com"
                             />
+                        {inputValidationError.username && 
+                            <p className="text-red-500 text-sm pl-1">{inputValidationError.username[0]}</p>}
                     </div>
                     <div className="grid gap-1">
                         <label htmlFor={"password"}>Password</label>
@@ -115,6 +133,8 @@ export default function LoginPage(){
                                 }
                             </button>
                         </div>
+                        {inputValidationError.password && 
+                            <p className="text-red-500 text-sm pl-1">{inputValidationError.password[0]}</p>}
                     </div>
                     <button type="submit" 
                         className="w-full border border-blue-600 bg-blue-600 py-1 px-4 rounded-md text-white 
