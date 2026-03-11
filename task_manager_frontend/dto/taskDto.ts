@@ -42,5 +42,5 @@ export interface TaskFormData {
   description: string;
   status: TaskStatus | string;
   priority: TaskPriority | string;
-  dueDate: string;
+  dueDate: Date;
 }

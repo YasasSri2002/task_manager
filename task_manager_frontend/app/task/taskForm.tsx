@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { TaskResponseDto,TaskFormData } from '@/dto/taskDto';
 import { TaskStatus, TaskPriority } from '@/types/task';
 import DynamicIcon from '@/utill/DynamicIcon';
+import { TaskRegisterFormErrors, taskRegistrationFormValidation } from '@/lib/schema/taskRegistraionFromValidationSchema';
 
 
 interface TaskFormProps {
@@ -12,24 +13,46 @@ interface TaskFormProps {
 }
 
 export default function TaskForm({ task, onSubmit, onCancel }: TaskFormProps) {
-  const [formData, setFormData] = useState<TaskFormData>({
+  const [formData, setFormData] = useState<TaskFormData & { dueDateStr: string }>({
     title: task?.title || '',
     description: task?.description || '',
     status: (task?.status as TaskStatus) || 'TODO',
     priority: (task?.priority as TaskPriority) || 'MEDIUM',
-    dueDate: task?.dueDate
-      ? new Date(task.dueDate).toISOString().split('T')[0]
-      : '',
+    dueDate: task?.dueDate || new Date(),
+    dueDateStr: task?.dueDate ? new Date(task.dueDate).toISOString().split("T")[0] : ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [inputValidationErrors, setInputValidationErrors] = useState<TaskRegisterFormErrors>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
+    const dataToValidate = {
+    ...formData,
+    dueDate: new Date(formData.dueDateStr)
+  };
+
+    const result = taskRegistrationFormValidation.safeParse(formData);
+
+    if (!result.success) {
+      setInputValidationErrors(result.error.flatten().fieldErrors);
+      return; // Stop here, don't call the API
+    }
+
+    setInputValidationErrors({})
+
+    const taskData: TaskFormData = {
+      title: result.data.title,
+      description: result.data.description,
+      dueDate: new Date(formData.dueDateStr),
+      priority: result.data.priority,
+      status: result.data.status,
+    };
+
     try {
-      await onSubmit(formData);
+      setLoading(true);
+      await onSubmit(taskData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save task');
     } finally {
@@ -76,12 +99,13 @@ export default function TaskForm({ task, onSubmit, onCancel }: TaskFormProps) {
             <input
               id="title"
               type="text"
-              required
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               placeholder="Enter task title"
             />
+            {inputValidationErrors.title && 
+                  <p className="text-red-500 text-sm pl-1">{inputValidationErrors.title[0]}</p>}
           </div>
 
           <div>
@@ -90,13 +114,15 @@ export default function TaskForm({ task, onSubmit, onCancel }: TaskFormProps) {
             </label>
             <textarea
               id="description"
-              required
+              
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 
               focus:ring-blue-500 text-sm min-h-25 resize-none"
               placeholder="Enter task description"
             />
+            {inputValidationErrors.description && 
+                  <p className="text-red-500 text-sm pl-1">{inputValidationErrors.description[0]}</p>}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -143,17 +169,21 @@ export default function TaskForm({ task, onSubmit, onCancel }: TaskFormProps) {
               id="dueDate"
               type="date"
               required
-              value={formData.dueDate}
-              onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              value={formData.dueDateStr}
+              onChange={(e) => setFormData({ ...formData, dueDateStr: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 
+              focus:ring-blue-500 text-sm"
             />
+            {inputValidationErrors.dueDate && 
+                  <p className="text-red-500 text-sm pl-1">{inputValidationErrors.dueDate[0]}</p>}
           </div>
 
           <div className="flex gap-3 pt-2">
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed text-sm font-medium"
+              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors
+               disabled:bg-blue-400 disabled:cursor-not-allowed text-sm font-medium"
             >
               {loading ? 'Saving...' : task ? 'Update Task' : 'Create Task'}
             </button>
