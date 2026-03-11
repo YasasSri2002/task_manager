@@ -1,6 +1,8 @@
 import { LoginRequestDto, LoginResponseDto } from "@/dto/login";
+import { DecodedToken } from "@/types/decodedToken";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_SPRING_BOOT_API_URL;
 
@@ -28,6 +30,13 @@ export async function login(loginRequestDto: LoginRequestDto): Promise<LoginResp
       // Set cookies
       Cookies.set("auth-token", jwtToken);
       Cookies.set("x-user-id", userId);
+
+      const decodedToken =jwtDecode<DecodedToken>(jwtToken);
+      const role = decodedToken.authorities.split(',')
+                          .find(auth => auth.startsWith('ROLE_'))?.substring(5);
+
+      Cookies.set("x-user-role",role!)
+
 
       return { token: jwtToken, userId };
     }

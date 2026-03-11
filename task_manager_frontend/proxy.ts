@@ -1,4 +1,4 @@
-// middleware.ts
+// middleware.ts -in older versions
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import {jwtDecode} from 'jwt-decode';
@@ -7,7 +7,7 @@ import { DecodedToken } from './types/decodedToken';
 
 // Define protected routes
 const protectedRoutes = [
-  '/super-admin',
+  '/admin',
   '/user',
 ];
 
@@ -47,8 +47,8 @@ function isProtectedUrl(pathname: string) {
 
 // Check role authorization per route
 function authorizationForRoutes(pathname: string, decodedToken: DecodedToken | null) {
-  if (pathname.startsWith('/super-admin')) {
-    return hasRole(decodedToken, ['ROLE_SUPER_ADMIN']);
+  if (pathname.startsWith('/admin')) {
+    return hasRole(decodedToken, ['ROLE_SUPER_ADMIN','ROLE_ADMIN']);
   }
   if (pathname.startsWith('/user')) {
     return hasRole(decodedToken, ['ROLE_USER','ROLE_SUPER_ADMIN']);
@@ -66,18 +66,24 @@ export default function Proxy(req: NextRequest) {
   const decodedToken = validateToken(token);
 
 
+
+
   // Role mismatch → redirect to forbidden
   if (!authorizationForRoutes(pathname, decodedToken)) {
     return NextResponse.redirect(new URL('/forbidden', req.url));
   }
 
+  
   // Allow access
-  return NextResponse.next();
+  return  NextResponse.next();
+
+
+
 }
 
 export const config = {
   matcher: [
-    '/super-admin/:path*',
+    '/admin/:path*',
     '/user/:path*',
   ],
 };
