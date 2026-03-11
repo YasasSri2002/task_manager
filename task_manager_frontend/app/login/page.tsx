@@ -55,10 +55,12 @@ export default function LoginPage(){
             </header>
             
                 <form className="grid gap-4 w-full sm:w-md md:w-lg" onSubmit={loginFormSubmit}>
-                    {errorMessage && 
+                   <div className="flex justify-center">
+                     {errorMessage && 
                         <p className="w-fit px-4 py-1 text-red-600 text-center text-sm bg-red-200 border-rose-500 rounded-sm">
                         {errorMessage}
                         </p>}
+                   </div>
                     <div className="grid gap-1">
                         <label  htmlFor={"email"}>Email</label>
                         <input type="text" name="email"
