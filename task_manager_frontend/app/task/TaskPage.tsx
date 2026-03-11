@@ -390,13 +390,20 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
               ))}
             </div>
 
-            <PaginationControls
-              hasNextPage={page * perPage < total}
-              hasPrevPage={page > 1}
-              endPage={total}
-              perPageNumber={String(perPage)}
-              routerPath={`user/${userId}/dashboard`}
-            />
+            <div className='flex justify-between items-center'>
+              <div className="">
+                <p className='text-sm md:text-lg text-gray-600'>
+                  showing page {page} of total page {Math.ceil(total/perPage)}
+                </p>
+              </div>
+                <PaginationControls
+                hasNextPage={page * perPage < total}
+                hasPrevPage={page > 1}
+                endPage={total}
+                perPageNumber={String(perPage)}
+                routerPath={`user/${userId}/dashboard`}
+              />
+            </div>
           </>
 
         )}
