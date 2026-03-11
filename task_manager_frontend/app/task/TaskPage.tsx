@@ -210,16 +210,58 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
 
       } else {
 
-        const payload: TaskRequestDto = {
+         Swal.fire({
+            title: 'Saving...',
+            text: 'Processing....',
+            allowOutsideClick: false,
+            background: '#fff',
+            color: '#000000',
+            didOpen: () => {
+              Swal.showLoading();
+          }
+        });
+
+       try{
+
+           const payload: TaskRequestDto = {
           ...data,
           dueDate: new Date(data.dueDate),
           userId: userId!
         };
-
+        
         const created = await newTask(payload);
 
         setTaskList(prev => [created, ...prev]);
+
+        Swal.close();
+
+        await Swal.fire({
+              icon: 'success',
+              title: 'Successful!',
+              background: '#fff',
+              color: '#000000',
+              timer: 3500,
+              timerProgressBar: true,
+              customClass: {
+                popup: 'border border-gray-700'
+              }
+            });
+      }catch(err: unknown){
+        if(err instanceof Error){
+          Swal.fire({
+              icon: 'error',
+              title: `Save Failed`,
+              text: err instanceof Error ? err.message : 'An unexpected error occurred.',
+              background: '#fff',
+              color: '#000000',
+              confirmButtonColor: '#dc2626',
+              customClass: {
+                popup: 'border border-gray-700'
+              }
+            });
+        }
       }
+       }
 
       setShowTaskForm(false);
       setTaskToEdit(undefined);
