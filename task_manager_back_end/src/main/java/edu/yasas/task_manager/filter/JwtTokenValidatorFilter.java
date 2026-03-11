@@ -66,8 +66,10 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
-        return request.getServletPath().equals("/authenticate/login")
-                || request.getServletPath().equals("/api/v1/user/persist");
+        String path = request.getServletPath();
+        return path.equals("/authenticate/admin/login")
+                || path.equals("/authenticate/user/login")
+                || path.equals("/api/v1/user/persist");
         //This filter will execute every other scenarios except log in and register
     }
 

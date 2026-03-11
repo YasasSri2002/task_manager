@@ -1,14 +1,14 @@
 package edu.yasas.task_manager.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -28,7 +28,14 @@ public class AdminEntity {
 
     private String password;
 
-    private String role = "ROLE_ADMIN";
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "admin_roles",
+            joinColumns = @JoinColumn(name = "admin_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @JsonManagedReference("admin-role")
+    private Set<RolesEntity> authorities;
 
 
 

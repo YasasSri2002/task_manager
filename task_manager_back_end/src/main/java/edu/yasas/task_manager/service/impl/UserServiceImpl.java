@@ -5,10 +5,13 @@ import edu.yasas.task_manager.dto.UserDto;
 import edu.yasas.task_manager.dto.request.UserRequestDto;
 import edu.yasas.task_manager.dto.response.TaskResponseDto;
 import edu.yasas.task_manager.dto.response.UserResponseDto;
+import edu.yasas.task_manager.entity.RolesEntity;
 import edu.yasas.task_manager.entity.TaskEntity;
 import edu.yasas.task_manager.entity.UserEntity;
 import edu.yasas.task_manager.exceptions.EmailAlreadyExistException;
+import edu.yasas.task_manager.exceptions.RoleNotFoundException;
 import edu.yasas.task_manager.exceptions.user_exceptions.UserNotFoundException;
+import edu.yasas.task_manager.repository.RolesRepository;
 import edu.yasas.task_manager.repository.UserRepository;
 import edu.yasas.task_manager.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static edu.yasas.task_manager.service.impl.TaskServiceImpl.getTaskDto;
 
@@ -30,6 +30,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final RolesRepository rolesRepository;
 
 
     public static UserResponseDto getUserResponseDto(UserEntity userEntity){
@@ -79,7 +81,9 @@ public class UserServiceImpl implements UserService {
         userEntity.setLastName(userRequestDto.getLastName());
         userEntity.setUsername(userRequestDto.getUsername());
         userEntity.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-
+        RolesEntity role = rolesRepository.findByName("ROLE_USER")
+                .orElseThrow(() -> new RoleNotFoundException("Role not found"));
+        userEntity.setAuthorities(Set.of(role));
         UserEntity savedEntity = userRepository.save(userEntity);
 
         return ResponseEntity.ok(getUserResponseDto(savedEntity));

@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -32,7 +33,14 @@ public class UserEntity {
 
     private String email;
 
-    private String role = "ROLE_USER";
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @JsonManagedReference("user-role")
+    private Set<RolesEntity> authorities;
 
     private String password;
 

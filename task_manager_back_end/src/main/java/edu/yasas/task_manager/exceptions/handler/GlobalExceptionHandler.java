@@ -2,6 +2,7 @@ package edu.yasas.task_manager.exceptions.handler;
 
 import edu.yasas.task_manager.dto.response.ErrorResponseDto;
 import edu.yasas.task_manager.exceptions.EmailAlreadyExistException;
+import edu.yasas.task_manager.exceptions.RoleNotFoundException;
 import edu.yasas.task_manager.exceptions.task_exceptions.TaskNotFoundException;
 import edu.yasas.task_manager.exceptions.user_exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -51,6 +52,15 @@ public class GlobalExceptionHandler {
         Map<String, String> error = new HashMap<>();
         error.put("message", "Invalid username or password");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    @ExceptionHandler(RoleNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> roleNotFound(RoleNotFoundException ex){
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto();
+        errorResponseDto.setHttpStatus(HttpStatus.BAD_REQUEST);
+        errorResponseDto.setMessage(ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
     }
 
 }
