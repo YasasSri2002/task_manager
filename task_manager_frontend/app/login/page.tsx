@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { FormEvent, useState } from "react";
 import DynamicIcon from "@/utill/DynamicIcon";
-import { login } from "@/services/login/loginService";
+import { login } from "@/services/auth/login/loginService";
 import { LoginRequestDto, LoginResponseDto } from "@/dto/login";
 import { jwtDecode } from "jwt-decode";
 import { DecodedToken } from "../../types/decodedToken";
