@@ -6,7 +6,7 @@ import DynamicIcon from "@/utill/DynamicIcon";
 import { login } from "@/services/login/loginService";
 import { LoginRequestDto, LoginResponseDto } from "@/dto/login";
 import { jwtDecode } from "jwt-decode";
-import { DecodedToken } from "../types/decodedToken";
+import { DecodedToken } from "../../types/decodedToken";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage(){

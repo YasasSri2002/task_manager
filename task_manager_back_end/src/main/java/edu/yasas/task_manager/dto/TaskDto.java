@@ -17,7 +17,7 @@ public class TaskDto {
 
     private String description;
 
-    private String status; //IN_PROGRESS,DONE,to do are the status
+    private String status; //IN_PROGRESS,COMPLETED,to do are the status
 
     private String priority; //HIGH,MEDIUM,LOW
 

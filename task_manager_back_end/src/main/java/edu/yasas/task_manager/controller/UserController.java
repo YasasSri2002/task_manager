@@ -22,6 +22,7 @@ public class UserController {
     }
 
     @GetMapping("/by-id")
+    @PreAuthorize("hasAnyRole('USER','ADMIN','SUPER_ADMIN')")
     public ResponseEntity<UserDto>getById(@RequestParam String id){
         return userService.getById(id);
     }

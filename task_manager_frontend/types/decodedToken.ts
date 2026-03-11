@@ -6,3 +6,4 @@ export interface DecodedToken {
   iss?: string;
   sub?: string;
 }
+

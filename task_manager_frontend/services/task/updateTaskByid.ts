@@ -1,0 +1,35 @@
+'use server'
+import { TaskFormData } from "@/dto/taskDto";
+import { AxiosError } from "axios";
+import axios from "axios";
+import { cookies } from "next/headers";
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_SPRING_BOOT_API_URL;
+
+export async function updateTaskById(id: string, task: TaskFormData) {
+  if (!BACKEND_URL) throw new Error("Backend URL not configured");
+
+  const cookieStore = await cookies();
+  const token = cookieStore.get("auth-token")?.value;
+  if (!token) throw new Error("No auth token found");
+
+  try {
+    const response = await axios.put(`${BACKEND_URL}/api/v1/task/update-task?taskId=${id}`,task, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    return response.data;
+
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      const status = error.response?.status;
+      if (status === 401) throw new Error("Unauthorized");
+      if (status === 403) throw new Error("Access denied");
+      if (status === 404) throw new Error("Task Not Found");
+      throw new Error("Something went wrong, please try again");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+}

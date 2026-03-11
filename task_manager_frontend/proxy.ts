@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import {jwtDecode} from 'jwt-decode';
-import { DecodedToken } from './app/types/decodedToken';
+import { DecodedToken } from './types/decodedToken';
 
 
 // Define protected routes
