@@ -22,43 +22,49 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping("/persist")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','USER')")
     public ResponseEntity<TaskDto>persist(@RequestBody TaskRequestDto taskRequestDto){
         return taskService.persist(taskRequestDto);
     }
 
     @GetMapping("/by-user-id")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','USER')")
     public ResponseEntity<List<TaskDto>>getAllByUserId(@RequestParam String id){
         return taskService.getAllByUserId(id);
     }
 
     @PutMapping("/mark-as-complete")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','USER')")
     public ResponseEntity<Map<String,String>>markAsComplete(@RequestParam String id){
         return taskService.markAsCompleted(id);
     }
 
     @PutMapping("/mark-as-in-progress")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','USER')")
     public ResponseEntity<Map<String,String>>markAsInProgress(@RequestParam String id){
         return taskService.markAsInProgress(id);
     }
 
     @DeleteMapping("/by-id")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN', 'USER')")
     public ResponseEntity<Map<String,String>>deleteById(@RequestParam String id){
         return taskService.deleteTask(id);
     }
 
     @DeleteMapping("/all/by-user/id")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN', 'USER')")
     public ResponseEntity<Map<String, String>>deleteAllTasksByUserId(@RequestParam String id){
         return  taskService.deleteAllTaskOfUserByUserid(id);
     }
 
     @PutMapping("/update-task")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','USER')")
     public ResponseEntity<TaskDto>updateTask(
             @RequestParam String taskId , @RequestBody TaskRequestDto taskRequestDto){
         return taskService.updateTaskbyId(taskId,taskRequestDto);
     }
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     public ResponseEntity<List<TaskResponseDto>>getAllTask(){
         return taskService.getAllTasks();
     }

@@ -13,6 +13,7 @@ import edu.yasas.task_manager.service.TaskService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -178,6 +179,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     public ResponseEntity<List<TaskResponseDto>> getAllTasks() {
         ArrayList<TaskResponseDto> taskResponseDtoArrayList = new ArrayList<>();
         List<TaskEntity> taskEntityList = taskRepository.findAll();
