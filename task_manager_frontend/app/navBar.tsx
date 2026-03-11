@@ -1,10 +1,12 @@
 'use client'
 import { logout } from "@/services/auth/logout/logoutService"
 import DynamicIcon from "@/utill/DynamicIcon"
+import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 
 
 export function Navbar({username,role}:{username: string, role: string}){
+    const router = useRouter();
 
     async function handleLogOut(){
         
@@ -22,7 +24,7 @@ export function Navbar({username,role}:{username: string, role: string}){
                     popup: 'border border-gray-700'
                     }
                 });
-                window.location.replace('/login');
+                router.push('/login');
 
         }catch(err: unknown){
             if(err instanceof Error){

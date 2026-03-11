@@ -11,3 +11,15 @@ export interface UserResponseDto{
     email: string;
 
 }
+
+export interface UserRequestDto{
+    firstName: string;
+
+    lastName: string;
+
+    username: string;
+
+    email: string;
+
+    password: string;
+}

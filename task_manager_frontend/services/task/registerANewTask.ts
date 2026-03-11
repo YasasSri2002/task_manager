@@ -7,7 +7,7 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_SPRING_BOOT_API_URL;
 
 
 
-export async function newTask(data : TaskRequestDto) {
+export async function registerNewTask(data : TaskRequestDto) {
   if (!BACKEND_URL) throw new Error("Backend URL not configured");
 
     const cookieStore = await cookies();
@@ -28,7 +28,7 @@ export async function newTask(data : TaskRequestDto) {
     if (error instanceof AxiosError) {
       const status = error.response?.status;
       if (status === 401) throw new Error("Invalid username or password");
-      if (status === 404) throw new Error("User not found");
+      if (status === 404) throw new Error("Task not found");
       if (status === 403) throw new Error("Access denied");
       throw new Error("Something went wrong, please try again");
     }

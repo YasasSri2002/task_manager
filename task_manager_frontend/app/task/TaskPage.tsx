@@ -12,7 +12,7 @@ import TaskForm from './taskForm';
 
 import { deleteTaskByid } from '@/services/task/deleteTaskByid';
 import { updateTaskById } from '@/services/task/updateTaskByid';
-import { newTask } from '@/services/task/newtask';
+import { registerNewTask } from '@/services/task/registerANewTask';
 import { markTaskAsCompletedById } from '@/services/task/markTaskAsCompletedById';
 import { markTaskAsInProgressById } from '@/services/task/markTaskAsInProgress';
 
@@ -229,7 +229,7 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
           userId: userId!
         };
         
-        const created = await newTask(payload);
+        const created = await registerNewTask(payload);
 
         setTaskList(prev => [created, ...prev]);
 
