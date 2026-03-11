@@ -39,7 +39,7 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    @JsonManagedReference("user-role")
+    @JsonManagedReference
     private Set<RolesEntity> authorities;
 
     private String password;

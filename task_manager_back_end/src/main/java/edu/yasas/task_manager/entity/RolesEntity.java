@@ -23,12 +23,9 @@ public class RolesEntity {
 
     private String name;
 
-    @ManyToMany(mappedBy = "authorities")
-    @JsonBackReference("admin-role")
-    private Set<AdminEntity> admin;
 
     @ManyToMany(mappedBy = "authorities")
-    @JsonBackReference("user-role")
+    @JsonBackReference
     private Set<UserEntity> user;
 
 

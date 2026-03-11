@@ -1,10 +1,10 @@
 package edu.yasas.task_manager.config;
 
-import edu.yasas.task_manager.entity.AdminEntity;
 import edu.yasas.task_manager.entity.RolesEntity;
+import edu.yasas.task_manager.entity.UserEntity;
 import edu.yasas.task_manager.exceptions.RoleNotFoundException;
-import edu.yasas.task_manager.repository.AdminRepository;
 import edu.yasas.task_manager.repository.RolesRepository;
+import edu.yasas.task_manager.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +13,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.Set;
 
 @Component
@@ -22,7 +21,7 @@ import java.util.Set;
 @Order(2)
 public class SuperAdminFeeder implements CommandLineRunner {
 
-    private final AdminRepository adminRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RolesRepository rolesRepository;
 
@@ -37,17 +36,17 @@ public class SuperAdminFeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if(adminRepository.findByEmail(email).isEmpty()){
+        if(userRepository.findByEmail(email).isEmpty()){
 
-            AdminEntity adminEntity = new AdminEntity();
-            adminEntity.setEmail(email);
+            UserEntity userEntity = new UserEntity();
+            userEntity.setEmail(email);
             String encodedPassword = passwordEncoder.encode(password);
-            adminEntity.setPassword(encodedPassword);
-            adminEntity.setUsername(username);
+            userEntity.setPassword(encodedPassword);
+            userEntity.setUsername(username);
             RolesEntity role = rolesRepository.findByName("ROLE_SUPER_ADMIN")
                     .orElseThrow(() -> new RoleNotFoundException("Role not found"));
-            adminEntity.setAuthorities(Set.of(role));
-            AdminEntity save = adminRepository.save(adminEntity);
+            userEntity.setAuthorities(Set.of(role));
+            UserEntity save = userRepository.save(userEntity);
             log.info(save.getEmail());
         }
     }
