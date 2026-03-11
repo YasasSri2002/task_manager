@@ -74,7 +74,11 @@ public class TaskServiceImpl implements TaskService {
         taskEntity.setDueDate(taskRequestDto.getDueDate());
         taskEntity.setCreatedAt(LocalDate.now());
         taskEntity.setUpdatedAt(LocalDate.now());
-        taskEntity.setStatus("TODO");
+        if(taskRequestDto.getStatus().isEmpty()){
+            taskEntity.setStatus("TODO");
+        }else{
+            taskEntity.setStatus(taskEntity.getStatus());
+        };
 
         UserEntity userEntity = userRepository.findById(UUID.fromString(taskRequestDto.getUserId()))
                 .orElseThrow(() -> new UserNotFoundException("user has not found"));
