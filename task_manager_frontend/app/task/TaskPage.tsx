@@ -401,7 +401,7 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
                 hasPrevPage={page > 1}
                 endPage={total}
                 perPageNumber={String(perPage)}
-                routerPath={`user/${userId}/dashboard`}
+                routerPath={pathname.replace(/^\//, '')}
               />
             </div>
           </>
