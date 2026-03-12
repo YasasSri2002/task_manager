@@ -126,7 +126,7 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
 
   const handleMarkComplete = async (id: string) => {
     const confirm = await Swal.fire({
-      title: 'Complete?',
+      title: 'Mark as Complete?',
       icon: 'question',
       showCancelButton: true
     });
@@ -141,7 +141,7 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
 
   const handleMarkInProgress = async (id: string) => {
     const confirm = await Swal.fire({
-      title: 'In Progress?',
+      title: 'Mark as In Progress?',
       icon: 'question',
       showCancelButton: true
     });

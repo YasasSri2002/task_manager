@@ -9,10 +9,10 @@ import Swal from "sweetalert2";
 import { registerNewUser } from "@/services/user/registerNewUser";
 import { useRouter } from "next/navigation";
 
-export function UserRegistrationForm(){
+export function UserRegistrationForm({onSubmit}: {onSubmit: (data: UserRequestDto) => Promise<void> }){
 
     const router = useRouter();
-
+    const[error,setError]=useState("");
     const[isPasswordShowing,setIsPasswordShowing] = useState(false);
     const[inputValidationErrors, setInpuValidationErrors] =useState<UserRegisterFormErrors>({})
 
@@ -45,55 +45,11 @@ export function UserRegistrationForm(){
         password: result.data.password,
         };
 
-        Swal.fire({
-        title: 'Registering...',
-        text: 'Please wait while we process your registration',
-        allowOutsideClick: false,
-        background: '#fff',
-        color: '#000000',
-        didOpen: () => {
-            Swal.showLoading();
-        }
-    });
-
-    try{
-        const response = await registerNewUser(userData)
-
-        Swal.close();
-        
-        // Show success (adjust this based on your API response)
-        await Swal.fire({
-        icon: 'success',
-        title: 'Registration Successful!',
-        text: 'Welcome to our Nestify community. Redirecting to login...',
-        background: '#fff',
-        color: '#000000',
-        confirmButtonColor: '#dc2626',
-        confirmButtonText: 'Go to Login',
-        timer: 2500,
-        timerProgressBar: true,
-        customClass: {
-            popup: 'border border-gray-700'
-        }
-        });
-        
-        router.push('/login');
-        
-    }catch(err: unknown){
-        console.log(err)
-        Swal.fire({
-        icon: 'error',
-        title: 'Registration Failed',
-        text: err instanceof Error ? err.message : 'An unexpected error occurred.',
-        background: '#fff',
-        color: '#000000',
-        confirmButtonColor: '#dc2626',
-        customClass: {
-            popup: 'border border-gray-700'
-        }
-        });
-    }
-
+        try {
+            await onSubmit(userData);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to save task');
+        } 
 
     }
 
@@ -101,6 +57,7 @@ export function UserRegistrationForm(){
         <div className="flex justify-center">
             <form className="grid gap-4 w-full sm:w-md md:w-lg" onSubmit={formSubmit}>
                     <div className="grid md:flex md:justify-between md:gap-5 w-full gap-4">
+                        {error && (<p className="text-red-500 text-sm pl-1">{error}</p>)}
                         <div className="grid gap-1 md:w-full">
                             <label  htmlFor={"firstName"}>First name</label>
                             <input type="text" name="firstName"

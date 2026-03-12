@@ -15,7 +15,8 @@ export function Navbar({username,role}:{username: string, role: string}){
            
             await Swal.fire({
                 icon: 'success',
-                title: 'Successful!',
+                title: 'Logged Out!',
+                text: "Successfully logged out",
                 background: '#fff',
                 color: '#000000',
                 timer: 3500,
