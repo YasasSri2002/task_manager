@@ -70,29 +70,27 @@ Tools
 
 · MySQL 
 
-
+· Git
 
 **Backend Setup (Spring Boot)**
 
-**1.**  Clone the repository
-	git clone https://github.com/YasasSri2002/task-management-system.git  
-
+**1.**      Clone the repository
+	git clone https://github.com/yourusername/task-management-system.git  
 	cd task-management-system/backend
 
-**2.**  Configure environmental variables 
- 
-		- ACTIVE_PROFILE= active application property file
-		- DATABASE_HOST = database host name
-		- DATABASE_NAME = database name
-		- DATABASE_PORT = database port
-		- DATABASE_USERNAME=your database username 
-		- DATABASE_PASSWORD=your database password 
-		- JWT_EXPIRE_TIME = token expire time give in milli-seconds 
-		- JWT_SECRET_KEY = jwt secrect key
-		- SUPER_ADMIN_USERNAME= new admin username 
-		- SUPER_ADMIN_EMAIL = new admin email
-		- SUPER_ADMIN_PASSWORD= new password
+**2.**   Configure environmental  variables 
 
+	- ACTIVE_PROFILE= active application property file
+	- DATABASE_HOST = database host name
+	- DATABASE_NAME = database name
+	- DATABASE_PORT = database port
+	- DATABASE_USERNAME=your database username 
+	- DATABASE_PASSWORD=your database password 
+	- JWT_EXPIRE_TIME = token expire time give in milli-seconds 
+	- JWT_SECRET_KEY = jwt secrect key
+	- SUPER_ADMIN_USERNAME= new admin username 
+	- SUPER_ADMIN_EMAIL = new admin email
+	- SUPER_ADMIN_PASSWORD= new password
 
 	
 
@@ -104,30 +102,7 @@ Tools
 	
 	[http://localhost:8080](http://localhost:8080)
 
-**Frontend Setup**
-
-**1.** Navigate to frontend folder
-
-	cd frontend
-
-**2.**  Install dependencies
-
-	npm install
-	
-**3.**  Configure local variable
-	NEXT_PUBLIC_SPRING_BOOT_API_URL
-	
-**4.**  Run the frontend
-
-	configure local variables
-	
-	npm run dev
-	
-	Frontend will start at:
-	
-	[http://localhost:3000](http://localhost:3000)
-
-## Backend Structure 
+## Backend Structure
 	edu.yasas.task_manager
 	│
 	├── config
@@ -143,40 +118,40 @@ Tools
 	├── exception
 	└── util
 
-## frontend Structure
 
-task_manager_front_end
-└── task_manager_frontend
-	│
-	├── app
-	│   ├── login
-	│   ├── register
-	│   ├── dashboard
-	│   └── tasks
-	│
-	├── components
-	│   ├── task
-	│   └── ui
-	│
-	├── services
-	│   ├── auth
-	│   │   ├── login
-	│   │   └── logout
-	│   │
-	│   ├── user
-	│   ├── task
-	│   └── ui
-	│
-	├── dto
-	│
-	├── types
-	│
-	├── lib
-	│
-	├── utils
-	│
-	└── middleware
-		└── Proxy.ts
+## Frontend Structure
+	task_manager_front_end
+	└── task_manager_frontend
+		│
+		├── app
+		│   ├── login
+		│   ├── register
+		│   ├── dashboard
+		│   └── tasks
+		│
+		├── components
+		│   ├── task
+		│   └── ui
+		│
+		├── services
+		│   ├── auth
+		│   │   ├── login
+		│   │   └── logout
+		│   │
+		│   ├── user
+		│   ├── task
+		│   └── ui
+		│
+		├── dto
+		│
+		├── types
+		│
+		├── lib
+		│
+		├── utils
+		│
+		└── middleware
+			└── Proxy.ts
 
 ## API documentation
 	After running backend visit http://localhost:8080/swagger-ui/index.html
