@@ -301,7 +301,7 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
                   setTaskToEdit(undefined);
                   setShowTaskForm(true);
                 }}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md flex gap-2"
+                className="bg-blue-600 text-white px-4 py-2 rounded-md flex gap-2 items-center"
               >
                 <DynamicIcon name="FaPlus" />
                 New Task

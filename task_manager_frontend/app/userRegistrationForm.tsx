@@ -1,22 +1,27 @@
 'use client';
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 
 import DynamicIcon from "@/utill/DynamicIcon";
 import { UserRegisterFormErrors, userRegistrationFormValidationSchema } from "@/lib/schema/userRegisterFromValidationSchema";
 import { UserRequestDto } from "@/dto/user";
 
-import Swal from "sweetalert2";
-import { registerNewUser } from "@/services/user/registerNewUser";
-import { useRouter } from "next/navigation";
 
-export function UserRegistrationForm({onSubmit}: {onSubmit: (data: UserRequestDto) => Promise<void> }){
 
-    const router = useRouter();
+export function UserRegistrationForm({onSubmit}: {onSubmit: (data: UserRequestDto,reset: () => void) => Promise<void> }){
+
+    const formRef = useRef<HTMLFormElement>(null);
+
     const[error,setError]=useState("");
     const[isPasswordShowing,setIsPasswordShowing] = useState(false);
     const[inputValidationErrors, setInpuValidationErrors] =useState<UserRegisterFormErrors>({})
 
-     async function formSubmit(event: FormEvent<HTMLFormElement>){
+    function reset() {
+        formRef.current?.reset();
+        setError("");
+        setInpuValidationErrors({});
+    }
+
+    async function formSubmit(event: FormEvent<HTMLFormElement>){
         event.preventDefault();
         const data = new FormData(event.currentTarget) 
        
@@ -46,16 +51,17 @@ export function UserRegistrationForm({onSubmit}: {onSubmit: (data: UserRequestDt
         };
 
         try {
-            await onSubmit(userData);
+            await onSubmit(userData,reset);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to save task');
         } 
 
     }
+   
 
     return(
         <div className="flex justify-center">
-            <form className="grid gap-4 w-full sm:w-md md:w-lg" onSubmit={formSubmit}>
+            <form ref={formRef} className="grid gap-4 w-full sm:w-md md:w-lg" onSubmit={formSubmit}>
                     <div className="grid md:flex md:justify-between md:gap-5 w-full gap-4">
                         {error && (<p className="text-red-500 text-sm pl-1">{error}</p>)}
                         <div className="grid gap-1 md:w-full">

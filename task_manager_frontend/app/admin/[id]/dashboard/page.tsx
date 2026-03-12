@@ -8,6 +8,8 @@ import { UserResponseDto } from "@/dto/user";
 import Cookies from "js-cookie";
 import { getUserById } from "@/services/user/getByid";
 import { getAllTasks } from "@/services/task/getAllTasks";
+import AdminRegistrationModal from "../../register-admin/page";
+import { AddAdminSection } from "./addAdminSection";
 
 export default function AdminDashboardPage(){
     const params = useParams();
@@ -15,6 +17,7 @@ export default function AdminDashboardPage(){
     const[userData,setUserData] =useState<UserResponseDto>();
     const[role,setRole] = useState("ADMIN");
     const[tasksList,setTasksList] = useState([]);
+    const[showRegisterForm,setShowRegisterForm] = useState(false);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -38,9 +41,20 @@ export default function AdminDashboardPage(){
     if (!userData) return <LoadingScreen message="Fetching user data..." />;
 
     return (
-        <main>
-            <Navbar username={userData.username} role={role} />
-            <TasksPage userId={id} tasks={tasksList}/> 
-        </main>
+        <div>
+            <main>
+                <Navbar username={userData.username} role={role} />
+                {
+                    role == "SUPER_ADMIN" && <AddAdminSection showForm={setShowRegisterForm}/>
+                }
+                <TasksPage userId={id} tasks={tasksList}/> 
+            </main>
+            {showRegisterForm && (
+                    <AdminRegistrationModal
+                        isOpen={showRegisterForm}
+                        onClose={() => setShowRegisterForm(false)}
+                    />
+            )}
+        </div>
     );
 }

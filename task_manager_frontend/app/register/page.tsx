@@ -1,6 +1,6 @@
 'use client'
 import { UserRequestDto } from "@/dto/user";
-import { UserRegistrationForm } from "./userRegistrationForm";
+import { UserRegistrationForm } from "../userRegistrationForm";
 import DynamicIcon from "@/utill/DynamicIcon";
 import { registerNewUser } from "@/services/user/registerNewUser";
 import Swal from "sweetalert2";
@@ -23,7 +23,7 @@ export default function UserRegistrationPage(){
         });
 
         try{
-            const response = await registerNewUser(data)
+            await registerNewUser(data)
 
             Swal.close();
             
@@ -66,8 +66,8 @@ export default function UserRegistrationPage(){
             <div className="grid gap-8 w-full md:w-md lg:w-xl px-5 sm:px-0">
                 <header className="grid justify-items-center">
                     <DynamicIcon name="FiUserPlus" className="text-2xl md:text-5xl lg:text-8xl text-blue-600"/>
-                    <h1 className="text-center text-lg md:text-2xl lg:text-3xl">Creat Account</h1>
-                    <h1 className="text-center text-md md:text-xl lg:text-2xl text-gray-600">Sign up for new account</h1>
+                    <h1 className="text-center text-lg md:text-2xl lg:text-3xl">Register An Admin</h1>
+                    <h1 className="text-center text-md md:text-xl lg:text-2xl text-gray-600">Give Access to new Admin</h1>
                 </header>
                 <UserRegistrationForm onSubmit={handleUserRegister}/>
             </div>

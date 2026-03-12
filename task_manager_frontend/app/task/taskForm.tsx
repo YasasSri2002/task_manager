@@ -28,11 +28,7 @@ export default function TaskForm({ task, onSubmit, onCancel }: TaskFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    const dataToValidate = {
-    ...formData,
-    dueDate: new Date(formData.dueDateStr)
-  };
-
+  
     const result = taskRegistrationFormValidation.safeParse(formData);
 
     if (!result.success) {

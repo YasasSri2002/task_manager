@@ -62,7 +62,11 @@ export default function LoginPage(){
                 router.push(`/admin/${userId}/dashboard/`);
             } else if (roles.includes("ROLE_USER")) {
                 router.push(`/user/${userId}/dashboard/`);
-            } else {
+            
+            } else if(roles.includes("ROLE_ADMIN")){
+                router.push(`/admin/${userId}/dashboard/`);
+            }
+             else {
                 router.push("/unauthorized");
             }
 
