@@ -126,44 +126,56 @@ Tools
 	
 	[http://localhost:3000](http://localhost:3000)
 
+## Backend Structure 
+	edu.yasas.task_manager
+	│
+	├── config
+	├── controller
+	├── service
+	│   └── impl
+	├── repository
+	├── entity
+	├── dto
+	│   ├── request
+	│   └── response
+	├── filter
+	├── exception
+	└── util
 
-##  frontend Structure
-│
-├── app
-│   ├── admin
-│   │   
-│   │
-│   ├── login
-│   │   
-│   │
-│   ├── register
-│   │   
-│   │
-│   ├── task
-│   │   
-│   │
-│   ├── user
-│   ├── layout.tsx
-│   ├── navBar.tsx
-│   └── globals.css
-│
-├── services
-│   ├── auth
-│   ├── task
-│   └── user
-│
-├── dto
-├── types
-├── util
-└── public
+## frontend Structure
 
-## Backend Structure
+task_manager_front_end
+└── task_manager_frontend
+	│
+	├── app
+	│   ├── login
+	│   ├── register
+	│   ├── dashboard
+	│   └── tasks
+	│
+	├── components
+	│   ├── task
+	│   └── ui
+	│
+	├── services
+	│   ├── auth
+	│   │   ├── login
+	│   │   └── logout
+	│   │
+	│   ├── user
+	│   ├── task
+	│   └── ui
+	│
+	├── dto
+	│
+	├── types
+	│
+	├── lib
+	│
+	├── utils
+	│
+	└── middleware
+		└── Proxy.ts
 
-·├── controller  
- ├── service  
- ├── repository  
- ├── model
-
- ├── Util  
- ├── filter  
- └── config
+## API documentation
+	After running backend visit http://localhost:8080/swagger-ui/index.html
