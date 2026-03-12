@@ -15,12 +15,13 @@ export default function LoginPage(){
     const[isPasswordShowing,setIsPasswordShowing] =useState(false);
     const[errorMessage,setErrorMessage] = useState<string|null>(null);
     const[inputValidationError,setInpuValidationError]= useState<LoginFormErrors>({});
+    const[isLoading,setIsLoading] =useState(false);
     const router = useRouter();
 
     async function loginFormSubmit(event: FormEvent<HTMLFormElement>){
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-
+        setIsLoading(true)
         const formValues ={
             username: formData.get('email') as string,
             password: formData.get('password') as string
@@ -52,6 +53,8 @@ export default function LoginPage(){
             if (token.startsWith("Bearer ")) {
                 token = token.substring(7);
             }
+
+            setIsLoading(false);
 
             // Decode JWT to get roles
             const decoded: DecodedToken = jwtDecode(token);
@@ -143,7 +146,7 @@ export default function LoginPage(){
                     <button type="submit" 
                         className="w-full border border-blue-600 bg-blue-600 py-1 px-4 rounded-md text-white 
                         active:scale-75">
-                        Sign in
+                       {isLoading ? 'loading...' : 'Sign in' }
                     </button>
                 </form>
 
