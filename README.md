@@ -80,17 +80,17 @@ Tools
 
 **2.**   Configure environmental  variables 
 
-ACTIVE_PROFILE= active application property file
-DATABASE_HOST = database host name
-DATABASE_NAME = database name
-DATABASE_PORT = database port
-DATABASE_USERNAME=your database username 
-DATABASE_PASSWORD=your database password 
-JWT_EXPIRE_TIME = token expire time give in milli-seconds 
-JWT_SECRET_KEY = jwt secrect key
-UPER_ADMIN_USERNAME= new admin username 
-SUPER_ADMIN_EMAIL = new admin email
-SUPER_ADMIN_PASSWORD= new password
+	- ACTIVE_PROFILE= active application property file
+	- DATABASE_HOST = database host name
+	- DATABASE_NAME = database name
+	- DATABASE_PORT = database port
+	- DATABASE_USERNAME=your database username 
+	- DATABASE_PASSWORD=your database password 
+	- JWT_EXPIRE_TIME = token expire time give in milli-seconds 
+	- JWT_SECRET_KEY = jwt secrect key
+	- SUPER_ADMIN_USERNAME= new admin username 
+	- SUPER_ADMIN_EMAIL = new admin email
+	- SUPER_ADMIN_PASSWORD= new password
 
 	
 
