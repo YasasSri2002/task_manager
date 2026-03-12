@@ -15,6 +15,7 @@ import { updateTaskById } from '@/services/task/updateTaskByid';
 import { registerNewTask } from '@/services/task/registerANewTask';
 import { markTaskAsCompletedById } from '@/services/task/markTaskAsCompletedById';
 import { markTaskAsInProgressById } from '@/services/task/markTaskAsInProgress';
+import Cookies from 'js-cookie';
 
 interface TasksPageProps {
   tasks: TaskResponseDto[];
@@ -26,6 +27,7 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const role = Cookies.get('x-user-role');
 
   const page = Number(searchParams.get('page') ?? '1');
   const perPage = Number(searchParams.get('per_page') ?? '10');
@@ -386,6 +388,7 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
                   onDelete={handleDeleteTask}
                   onMarkComplete={handleMarkComplete}
                   onMarkInProgress={handleMarkInProgress}
+                  role={role!}
                 />
               ))}
             </div>

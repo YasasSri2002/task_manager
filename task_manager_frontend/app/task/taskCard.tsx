@@ -10,6 +10,7 @@ interface TaskItemProps {
   onDelete: (id: string) => void;
   onMarkComplete: (id: string) => void;
   onMarkInProgress: (id: string) => void;
+  role: string;
 }
 
 const statusColors: Record<TaskStatus, string> = {
@@ -30,7 +31,7 @@ const priorityColors: Record<TaskPriority, string> = {
   HIGH: "bg-red-100 text-red-700",
 };
 
-export default function TaskCard({task, onEdit, onDelete, onMarkComplete, onMarkInProgress}: TaskItemProps) {
+export default function TaskCard({task, onEdit, onDelete, onMarkComplete, onMarkInProgress, role}: TaskItemProps) {
 
 
   return (
@@ -81,42 +82,45 @@ export default function TaskCard({task, onEdit, onDelete, onMarkComplete, onMark
           </div>
 
           {/* Right: action buttons */}
-          <div className="flex gap-1.5 shrink-0">
-            {task.status !== "COMPLETED" && (
+          {
+            role == "USER" && 
+            <div className="flex gap-1.5 shrink-0">
+              {task.status !== "COMPLETED" && (
+                <button
+                  onClick={() => onMarkComplete(task.id)}
+                  className="p-2 text-green-600 hover:bg-green-50 rounded-md transition-colors"
+                  title="Mark as complete"
+                >
+                  <DynamicIcon name="FaCheckDouble" className="h-5 w-5" />
+                </button>
+              )}
+              {!["IN_PROGRESS", "COMPLETED"].includes(task.status) && (
+                <button
+                  onClick={() => onMarkInProgress(task.id)}
+                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                  title="Mark as in progress"
+                >
+                  <DynamicIcon name="FaClockRotateLeft" className="h-5 w-5" />
+                </button>
+              )}
+              {!["IN_PROGRESS", "COMPLETED"].includes(task.status) && (
+                <button
+                  onClick={() => onEdit(task)}
+                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                  title="Edit task"
+                >
+                  <DynamicIcon name="FaEdit" className="h-5 w-5" />
+                </button>
+              )}
               <button
-                onClick={() => onMarkComplete(task.id)}
-                className="p-2 text-green-600 hover:bg-green-50 rounded-md transition-colors"
-                title="Mark as complete"
+                onClick={() => onDelete(task.id)}
+                className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                title="Delete task"
               >
-                <DynamicIcon name="FaCheckDouble" className="h-5 w-5" />
+                <DynamicIcon name="FaTrash" className="h-5 w-5" />
               </button>
-            )}
-            {!["IN_PROGRESS", "COMPLETED"].includes(task.status) && (
-              <button
-                onClick={() => onMarkInProgress(task.id)}
-                className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
-                title="Mark as in progress"
-              >
-                <DynamicIcon name="FaClockRotateLeft" className="h-5 w-5" />
-              </button>
-            )}
-            {!["IN_PROGRESS", "COMPLETED"].includes(task.status) && (
-              <button
-                onClick={() => onEdit(task)}
-                className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
-                title="Edit task"
-              >
-                <DynamicIcon name="FaEdit" className="h-5 w-5" />
-              </button>
-            )}
-            <button
-              onClick={() => onDelete(task.id)}
-              className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
-              title="Delete task"
-            >
-              <DynamicIcon name="FaTrash" className="h-5 w-5" />
-            </button>
-          </div>
+            </div>
+          }
         </div>
       </div>
     </div>
