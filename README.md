@@ -137,5 +137,80 @@ Tools
 		└── middleware
 			└── Proxy.ts
 
+<<<<<<< HEAD
 ## API documentation
 	After running backend visit http://localhost:8080/swagger-ui/index.html
+=======
+	cd frontend
+
+**2.**  Install dependencies
+
+	npm install
+	
+**3.**  Configure local variable
+	NEXT_PUBLIC_SPRING_BOOT_API_URL
+	
+**4.**  Run the frontend
+
+	configure local variables
+	
+	npm run dev
+	
+	Frontend will start at:
+	
+	[http://localhost:3000](http://localhost:3000)
+
+## Backend Structure 
+	edu.yasas.task_manager
+	│
+	├── config
+	├── controller
+	├── service
+	│   └── impl
+	├── repository
+	├── entity
+	├── dto
+	│   ├── request
+	│   └── response
+	├── filter
+	├── exception
+	└── util
+
+## frontend Structure
+
+task_manager_front_end
+└── task_manager_frontend
+	│
+	├── app
+	│   ├── login
+	│   ├── register
+	│   ├── dashboard
+	│   └── tasks
+	│
+	├── components
+	│   ├── task
+	│   └── ui
+	│
+	├── services
+	│   ├── auth
+	│   │   ├── login
+	│   │   └── logout
+	│   │
+	│   ├── user
+	│   ├── task
+	│   └── ui
+	│
+	├── dto
+	│
+	├── types
+	│
+	├── lib
+	│
+	├── utils
+	│
+	└── middleware
+		└── Proxy.ts
+
+## API documentation
+	After running backend visit http://localhost:8080/swagger-ui/index.html
+>>>>>>> new
