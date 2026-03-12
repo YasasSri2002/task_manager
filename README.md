@@ -70,7 +70,6 @@ Tools
 
 · MySQL 
 
-· Git
 
 **Backend Setup (Spring Boot)**
 
