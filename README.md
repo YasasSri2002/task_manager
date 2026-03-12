@@ -68,7 +68,7 @@ Tools
 
 · Node.js 19+
 
-· MySQL or PostgreSQL
+· MySQL 
 
 · Git
 
