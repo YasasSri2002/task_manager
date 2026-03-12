@@ -13,7 +13,7 @@ export async function markTaskAsInProgressById(id: string) {
   if (!token) throw new Error("No auth token found");
 
   try {
-    const response = await axios.put(`${BACKEND_URL}/api/v1/task/mark-as-in-progress?id=${id}`,{}, {
+    const response = await axios.put(`${BACKEND_URL}/api/v1/task/mark-as-in-progress?taskId=${id}`,{}, {
       headers: {
         Authorization: `Bearer ${token}`
       }

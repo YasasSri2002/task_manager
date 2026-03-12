@@ -29,26 +29,26 @@ public class TaskController {
 
     @GetMapping("/by-user-id")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','USER')")
-    public ResponseEntity<List<TaskDto>>getAllByUserId(@RequestParam String id){
-        return taskService.getAllByUserId(id);
+    public ResponseEntity<List<TaskDto>>getAllByUserId(@RequestParam String userId){
+        return taskService.getAllByUserId(userId);
     }
 
     @PutMapping("/mark-as-complete")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','USER')")
-    public ResponseEntity<Map<String,String>>markAsComplete(@RequestParam String id){
-        return taskService.markAsCompleted(id);
+    public ResponseEntity<Map<String,String>>markAsComplete(@RequestParam String taskId){
+        return taskService.markAsCompleted(taskId);
     }
 
     @PutMapping("/mark-as-in-progress")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','USER')")
-    public ResponseEntity<Map<String,String>>markAsInProgress(@RequestParam String id){
-        return taskService.markAsInProgress(id);
+    public ResponseEntity<Map<String,String>>markAsInProgress(@RequestParam String taskId){
+        return taskService.markAsInProgress(taskId);
     }
 
     @DeleteMapping("/by-id")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN', 'USER')")
-    public ResponseEntity<Map<String,String>>deleteById(@RequestParam String id){
-        return taskService.deleteTask(id);
+    public ResponseEntity<Map<String,String>>deleteById(@RequestParam String taskId){
+        return taskService.deleteTask(taskId);
     }
 
     @DeleteMapping("/all/by-user/id")

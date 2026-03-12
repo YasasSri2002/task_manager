@@ -40,7 +40,7 @@ export default function TaskForm({ task, onSubmit, onCancel }: TaskFormProps) {
 
     const taskData: TaskFormData = {
       title: result.data.title,
-      description: result.data.description,
+      description: formData.description,
       dueDate: new Date(formData.dueDateStr),
       priority: result.data.priority,
       status: result.data.status,
@@ -117,8 +117,7 @@ export default function TaskForm({ task, onSubmit, onCancel }: TaskFormProps) {
               focus:ring-blue-500 text-sm min-h-25 resize-none"
               placeholder="Enter task description"
             />
-            {inputValidationErrors.description && 
-                  <p className="text-red-500 text-sm pl-1">{inputValidationErrors.description[0]}</p>}
+          
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -170,8 +169,6 @@ export default function TaskForm({ task, onSubmit, onCancel }: TaskFormProps) {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 
               focus:ring-blue-500 text-sm"
             />
-            {inputValidationErrors.dueDate && 
-                  <p className="text-red-500 text-sm pl-1">{inputValidationErrors.dueDate[0]}</p>}
           </div>
 
           <div className="flex gap-3 pt-2">

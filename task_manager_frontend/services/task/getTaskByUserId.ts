@@ -13,7 +13,7 @@ export async function getTaskByUserId(id: string) {
   if (!token) throw new Error("No auth token found");
 
   try {
-    const response = await axios.get(`${BACKEND_URL}/api/v1/task/by-user-id?id=${id}`, {
+    const response = await axios.get(`${BACKEND_URL}/api/v1/task/by-user-id?userId=${id}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
