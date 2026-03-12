@@ -79,7 +79,8 @@ Tools
 
 	cd task-management-system/backend
 
-**2.**  Configure environmental  variables  
+**2.**  Configure environmental variables 
+ 
 		- ACTIVE_PROFILE= active application property file
 		- DATABASE_HOST = database host name
 		- DATABASE_NAME = database name
