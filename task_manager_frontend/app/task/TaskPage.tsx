@@ -16,6 +16,7 @@ import { registerNewTask } from '@/services/task/registerANewTask';
 import { markTaskAsCompletedById } from '@/services/task/markTaskAsCompletedById';
 import { markTaskAsInProgressById } from '@/services/task/markTaskAsInProgress';
 import Cookies from 'js-cookie';
+import { useMutation } from '@tanstack/react-query';
 
 interface TasksPageProps {
   tasks: TaskResponseDto[];
@@ -109,6 +110,14 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
 
   const total = filteredTasks.length;
 
+  const deleteTask = useMutation({
+    mutationFn: async (taskId: string)=>{
+      await deleteTaskByid(taskId);
+    },onSuccess:()=>{
+      Swal.fire('Deleted!', '', 'success');
+    }
+  })
+
   const handleDeleteTask = async (id: string) => {
 
     const confirm = await Swal.fire({
@@ -119,11 +128,7 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
 
     if (!confirm.isConfirmed) return;
 
-    await deleteTaskByid(id);
-
-    setTaskList(prev => prev.filter(task => task.id !== id));
-
-    Swal.fire('Deleted!', '', 'success');
+    deleteTask.mutate(id);
   };
 
   const handleMarkComplete = async (id: string) => {

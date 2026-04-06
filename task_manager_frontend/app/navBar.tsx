@@ -47,7 +47,7 @@ export function Navbar({username,role}:{username: string, role: string}){
 
     return(
         <div>
-            <div className="flex justify-between items-center px-2 h-20 shadow-xl bg-white">
+            <div className="flex justify-between items-center px-2 h-20 shadow-xl bg-white pl-15">
                 <header className="grid">
                     <h1 className="text-md md:text-lg lg:text-xl">Task management</h1>
                     <h1 className="text-sm md:text-md lg:text-lg text-gray-600">Welcome, {username} ({role})</h1>

@@ -1,44 +1,62 @@
 'use client'
 import { Navbar } from "@/app/navBar";
 import LoadingScreen from "@/components/loadingScreen";
-import { UserResponseDto } from "@/dto/user";
+
 import { getUserById } from "@/services/user/getByid";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { TaskResponseDto } from "@/dto/taskDto";
+
 import TasksPage from "@/app/task/TaskPage";
 import { getTaskByUserId } from "@/services/task/getTaskByUserId";
 import Cookies from "js-cookie";
+import {  useQuery } from "@tanstack/react-query";
+import { LocalQueryProvider } from "./localQueryProvider";
 
-export default function UserDashboardPage() {
-    const [userData, setUserData] = useState<UserResponseDto>();
-    const[taskList, setTaskList] =useState<TaskResponseDto[]>([]);
-    const[role,setRole] = useState("USER");
+
+
+
+function UserDashboardPageContent() {
+    
+    
     const params = useParams();
     const id = params.id as string;
+    
+    const role = Cookies.get('x-user-role') ?? "USER";
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            const cookieRole = Cookies.get('x-user-role');
-            const data = await getUserById(id);
-            setUserData(data);
-            setRole(cookieRole!);
-        };
-        const fetchTaskList = async () =>{
+    const {data:TaskResponseDtolist = []} =useQuery({queryKey: ['tasks',id],
+            queryFn:   async() =>{
             const data = await getTaskByUserId(id);
-            setTaskList(data);
+            return data
         }
-        fetchUser();
-        fetchTaskList();
-        
-    }, [id]);
+        })
+
+    const {data:userData} = useQuery({
+        queryKey: ['user', id],
+        queryFn: async () => {  
+            const data=  await getUserById(id);   
+            return data 
+        }
+    })
+    
+
+
+    
 
     if (!userData) return <LoadingScreen message="Fetching user data..." />;
 
     return (
+        
+    
         <main>
-            <Navbar username={userData.username} role={role} />
-            <TasksPage userId={id} tasks={taskList}/>
+            <Navbar username={userData.username} role={role} />     
+            <TasksPage userId={id} tasks={TaskResponseDtolist}/>
         </main>
     );
+}
+
+export default function UserDashboardPage() {
+  return (
+    <LocalQueryProvider>
+      <UserDashboardPageContent />
+    </LocalQueryProvider>
+  );
 }
