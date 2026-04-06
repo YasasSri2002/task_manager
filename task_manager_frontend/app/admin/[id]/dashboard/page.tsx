@@ -10,14 +10,15 @@ import { getUserById } from "@/services/user/getByid";
 import { getAllTasks } from "@/services/task/getAllTasks";
 import AdminRegistrationModal from "../../register-admin/page";
 import { AddAdminSection } from "./addAdminSection";
+import { useTasks } from "@/hooks/useTasks";
 
 export default function AdminDashboardPage(){
     const params = useParams();
     const id = params.id as string;
     const[userData,setUserData] =useState<UserResponseDto>();
     const[role,setRole] = useState("ADMIN");
-    const[tasksList,setTasksList] = useState([]);
     const[showRegisterForm,setShowRegisterForm] = useState(false);
+    const{data: tasksList=[], isLoading, error} = useTasks();
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -27,18 +28,11 @@ export default function AdminDashboardPage(){
             setRole(cookieRole!);
         };
         
-
-        const fetchAllTasks = async ()=>{
-            const data = await getAllTasks();
-            setTasksList(data);
-        }
-        fetchUser();
-        fetchAllTasks();
-        
+        fetchUser();      
         
     }, [id]);
 
-    if (!userData) return <LoadingScreen message="Fetching user data..." />;
+    if (!userData || isLoading) return <LoadingScreen message="Fetching user data..." />;
 
     return (
         <div>
