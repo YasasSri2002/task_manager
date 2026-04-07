@@ -97,9 +97,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<UserDto> getById(String id) {
+    public ResponseEntity<UserDto> getById(UUID id) {
 
-        UserEntity userEntity = userRepository.findById(UUID.fromString(id))
+        UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User has been not found"));
 
         return ResponseEntity.ok(getUserDto(userEntity));

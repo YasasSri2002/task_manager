@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_SPRING_BOOT_API_URL;
 
-export async function getUserById(id: string) {
+export async function getUserById() {
   if (!BACKEND_URL) throw new Error("Backend URL not configured");
 
   const cookieStore = await cookies();
@@ -13,7 +13,7 @@ export async function getUserById(id: string) {
   if (!token) throw new Error("No auth token found");
 
   try {
-    const response = await axios.get(`${BACKEND_URL}/api/v1/user/by-id?id=${id}`, {
+    const response = await axios.get(`${BACKEND_URL}/api/v1/user/by-id`, {
       headers: {
         Authorization: `Bearer ${token}`
       }

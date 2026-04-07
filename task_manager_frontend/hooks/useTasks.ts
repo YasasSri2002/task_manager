@@ -18,7 +18,7 @@ export const useGetAllTasks = ()=> {
     })
 }
 
-export const useUserTasksByUserId= (id: string)=>{
+export const useGetTasksByUserId= (id: string)=>{
     return useQuery({
         queryKey: ['tasksOfAUser',id],
         queryFn: ()=> getTaskByUserId(id)

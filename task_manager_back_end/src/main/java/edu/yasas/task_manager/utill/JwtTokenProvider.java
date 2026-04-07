@@ -1,5 +1,6 @@
 package edu.yasas.task_manager.utill;
 
+import edu.yasas.task_manager.config.CustomUserDetail;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import javax.crypto.SecretKey;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -26,7 +28,13 @@ public class JwtTokenProvider {
 
     public String generateToken(Authentication authentication){
 
+        CustomUserDetail customUserDetail = (CustomUserDetail) authentication.getPrincipal();
+
         String username = authentication.getName();
+
+        assert customUserDetail != null;
+        UUID userId = customUserDetail.getUserId();
+
 
         String authorities = authentication.getAuthorities()
                 .stream()
@@ -40,7 +48,7 @@ public class JwtTokenProvider {
                 .expiration(new Date(System.currentTimeMillis() + this.expiration))
                 .claim("username", username)
                 .claim("authorities",authorities)
-                .subject("Jwt Token")
+                .subject(userId.toString())
                 .issuedAt(new Date())
                 .signWith(key)
                 .compact();

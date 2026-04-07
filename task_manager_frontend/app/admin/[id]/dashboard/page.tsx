@@ -23,7 +23,7 @@ export default function AdminDashboardPage(){
     useEffect(() => {
         const fetchUser = async () => {
             const cookieRole = Cookies.get('x-user-role');
-            const data = await getUserById(id);
+            const data = await getUserById();
             setUserData(data);
             setRole(cookieRole!);
         };

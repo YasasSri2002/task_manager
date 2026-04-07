@@ -1,5 +1,6 @@
 package edu.yasas.task_manager.filter;
 
+import edu.yasas.task_manager.config.CustomUserDetail;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
@@ -18,6 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 
 public class JwtTokenValidatorFilter extends OncePerRequestFilter {
@@ -47,9 +49,19 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 
                 String username = String.valueOf(claims.get("username"));
                 String authorities = String.valueOf(claims.get("authorities"));
+                UUID userId = UUID.fromString(claims.getSubject());
 
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null,
-                        AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
+                // Create CustomUserDetail
+                CustomUserDetail userDetails = new CustomUserDetail(
+                        username,
+                        null, // password is not needed here
+                        AuthorityUtils.commaSeparatedStringToAuthorityList(authorities),
+                        userId
+                );
+
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(username, null,
+                        userDetails.getAuthorities());
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
