@@ -8,12 +8,13 @@ import org.springframework.scheduling.config.Task;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public interface TaskService {
 
     ResponseEntity<TaskDto>persist(TaskRequestDto taskRequestDto);
 
-    ResponseEntity<List<TaskDto>>getAllByUserId(String id);
+    ResponseEntity<List<TaskDto>>getAllByUserId(UUID id);
 
     ResponseEntity<Map<String,String>>markAsCompleted(String taskId);
 

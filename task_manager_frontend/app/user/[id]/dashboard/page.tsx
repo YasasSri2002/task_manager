@@ -23,7 +23,7 @@ function UserDashboardPageContent() {
     const id = params.id as string;
 
     //api hooks
-    const{data: TaskResponseDtolist} = useGetTasksByUserId(id);
+    const{data: TaskResponseDtolist} = useGetTasksByUserId();
     
     const role = Cookies.get('x-user-role') ?? "";
 
@@ -41,7 +41,7 @@ function UserDashboardPageContent() {
     
         <main>
             <Navbar username={userData.username} role={role} />     
-            <TasksPage userId={id} tasks={TaskResponseDtolist}/>
+            <TasksPage userId={id} tasks={TaskResponseDtolist ?? []}/>
         </main>
     );
 }

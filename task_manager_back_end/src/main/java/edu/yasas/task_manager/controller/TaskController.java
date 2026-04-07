@@ -1,5 +1,6 @@
 package edu.yasas.task_manager.controller;
 
+import edu.yasas.task_manager.config.CustomUserDetail;
 import edu.yasas.task_manager.dto.TaskDto;
 import edu.yasas.task_manager.dto.request.TaskRequestDto;
 import edu.yasas.task_manager.dto.response.TaskResponseDto;
@@ -8,10 +9,12 @@ import edu.yasas.task_manager.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +32,8 @@ public class TaskController {
 
     @GetMapping("/by-user-id")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','USER')")
-    public ResponseEntity<List<TaskDto>>getAllByUserId(@RequestParam String userId){
+    public ResponseEntity<List<TaskDto>>getAllByUserId(@AuthenticationPrincipal CustomUserDetail userDetail){
+        UUID userId = userDetail.getUserId();
         return taskService.getAllByUserId(userId);
     }
 

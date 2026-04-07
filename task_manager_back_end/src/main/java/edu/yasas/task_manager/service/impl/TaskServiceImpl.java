@@ -92,12 +92,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public ResponseEntity<List<TaskDto>> getAllByUserId(String id) {
+    public ResponseEntity<List<TaskDto>> getAllByUserId(UUID id) {
 
         ArrayList<TaskDto> taskDtoArrayList = new ArrayList<>();
 
         Iterable<TaskEntity> allByUserId =
-                taskRepository.findAllByUserEntityId(UUID.fromString(id));
+                taskRepository.findAllByUserEntityId(id);
 
         allByUserId.forEach(taskEntity -> taskDtoArrayList.add(getTaskDto(taskEntity)));
 

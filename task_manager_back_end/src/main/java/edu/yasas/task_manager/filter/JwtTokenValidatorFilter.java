@@ -60,7 +60,7 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
                 );
 
                 UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(username, null,
+                        new UsernamePasswordAuthenticationToken(userDetails, null,
                         userDetails.getAuthorities());
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
