@@ -26,8 +26,12 @@ public class TaskController {
 
     @PostMapping("/persist")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','USER')")
-    public ResponseEntity<TaskDto>persist(@RequestBody TaskRequestDto taskRequestDto){
-        return taskService.persist(taskRequestDto);
+    public ResponseEntity<TaskDto>persist(
+            @AuthenticationPrincipal CustomUserDetail userDetail,
+            @RequestBody TaskRequestDto taskRequestDto
+    ){
+        UUID userId = userDetail.getUserId();
+        return taskService.persist(userId,taskRequestDto);
     }
 
     @GetMapping("/by-user-id")

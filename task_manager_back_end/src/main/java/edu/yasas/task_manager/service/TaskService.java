@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface TaskService {
 
-    ResponseEntity<TaskDto>persist(TaskRequestDto taskRequestDto);
+    ResponseEntity<TaskDto>persist(UUID userId,TaskRequestDto taskRequestDto);
 
     ResponseEntity<List<TaskDto>>getAllByUserId(UUID id);
 

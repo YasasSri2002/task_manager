@@ -34,7 +34,6 @@ export interface TaskRequestDto{
 
     dueDate: Date;
 
-    userId: string;
 }
 
 export interface TaskFormData {

@@ -8,9 +8,10 @@ import { useParams } from "next/navigation";
 import TasksPage from "@/app/task/TaskPage";
 
 import Cookies from "js-cookie";
-import {  useQuery } from "@tanstack/react-query";
+
 import { useGetTasksByUserId } from "@/hooks/useTasks";
-import { userDataQueryOption } from "@/queryOptions/userQueryOptions";
+
+import { useUserData } from "@/hooks/useUser";
 
 
 
@@ -29,7 +30,7 @@ function UserDashboardPageContent() {
 
    
 
-    const {data:userData} = useQuery(userDataQueryOption());
+    const {data:userData} = useUserData();
     
 
     

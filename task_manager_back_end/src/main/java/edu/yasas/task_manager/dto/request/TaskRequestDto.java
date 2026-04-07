@@ -22,6 +22,6 @@ public class TaskRequestDto {
 
     private LocalDate dueDate;
 
-    private String userId;
+
 
 }

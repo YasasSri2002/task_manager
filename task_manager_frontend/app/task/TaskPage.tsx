@@ -217,7 +217,6 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
         const payload: TaskRequestDto = {
           ...data,
           dueDate: new Date(data.dueDate),
-          userId: userId!
         };
         
         saveTask(payload);

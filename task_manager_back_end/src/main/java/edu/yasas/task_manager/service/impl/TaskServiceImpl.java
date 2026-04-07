@@ -66,7 +66,7 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public ResponseEntity<TaskDto> persist(TaskRequestDto taskRequestDto) {
+    public ResponseEntity<TaskDto> persist(UUID userId,TaskRequestDto taskRequestDto) {
 
         TaskEntity taskEntity = new TaskEntity();
         taskEntity.setTitle(taskRequestDto.getTitle());
@@ -81,7 +81,7 @@ public class TaskServiceImpl implements TaskService {
             taskEntity.setStatus(taskEntity.getStatus());
         };
 
-        UserEntity userEntity = userRepository.findById(UUID.fromString(taskRequestDto.getUserId()))
+        UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("user has not found"));
 
         taskEntity.setUserEntity(userEntity);
