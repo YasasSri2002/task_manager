@@ -144,9 +144,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public ResponseEntity<Map<String, String>> deleteAllTaskOfUserByUserid(String userId) {
+    public ResponseEntity<Map<String, String>> deleteAllTaskOfUserByUserid(UUID userId) {
 
-        taskRepository.deleteAllByUserEntityId(UUID.fromString(userId));
+        taskRepository.deleteAllByUserEntityId(userId);
 
         return ResponseEntity.ok(Map.of("Success",
                 String.format("All tasks under user %s are deleted ",userId)));

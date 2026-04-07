@@ -57,7 +57,8 @@ public class TaskController {
 
     @DeleteMapping("/all/by-user/id")
     @PreAuthorize("hasAnyRole('USER')")
-    public ResponseEntity<Map<String, String>>deleteAllTasksByUserId(@RequestParam String id){
+    public ResponseEntity<Map<String, String>>deleteAllTasksByUserId(@AuthenticationPrincipal CustomUserDetail userDetail){
+        UUID id = userDetail.getUserId();
         return  taskService.deleteAllTaskOfUserByUserid(id);
     }
 
