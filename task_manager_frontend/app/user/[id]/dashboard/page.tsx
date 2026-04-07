@@ -9,7 +9,7 @@ import TasksPage from "@/app/task/TaskPage";
 import { getTaskByUserId } from "@/services/task/getTaskByUserId";
 import Cookies from "js-cookie";
 import {  useQuery } from "@tanstack/react-query";
-import { LocalQueryProvider } from "./localQueryProvider";
+
 
 
 
@@ -55,8 +55,7 @@ function UserDashboardPageContent() {
 
 export default function UserDashboardPage() {
   return (
-    <LocalQueryProvider>
+    
       <UserDashboardPageContent />
-    </LocalQueryProvider>
   );
 }

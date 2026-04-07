@@ -17,6 +17,7 @@ import { markTaskAsCompletedById } from '@/services/task/markTaskAsCompletedById
 import { markTaskAsInProgressById } from '@/services/task/markTaskAsInProgress';
 import Cookies from 'js-cookie';
 import { useMutation } from '@tanstack/react-query';
+import { useDeleteTask, useMarkTaskAsInProgress, useMarkTaskCompleteById, useRegisterNewTask, useUpdateTask } from '@/hooks/useTasks';
 
 interface TasksPageProps {
   tasks: TaskResponseDto[];
@@ -50,6 +51,13 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
   const [priorityFilter, setPriorityFilter] = useState<TaskPriority | ''>('');
   const [sortBy, setSortBy] = useState<SortField>('dueDate');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+
+  //api hooks
+  const{mutate: markTaskComplete} = useMarkTaskCompleteById();
+  const {mutate: deleteTask} = useDeleteTask();
+  const {mutate: markTaskInProgress} =useMarkTaskAsInProgress();
+  const {mutate: updateTask} =useUpdateTask();
+  const {mutate: saveTask} = useRegisterNewTask();
 
   useEffect(() => {
     setTaskList(tasks);
@@ -110,13 +118,7 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
 
   const total = filteredTasks.length;
 
-  const deleteTask = useMutation({
-    mutationFn: async (taskId: string)=>{
-      await deleteTaskByid(taskId);
-    },onSuccess:()=>{
-      Swal.fire('Deleted!', '', 'success');
-    }
-  })
+  
 
   const handleDeleteTask = async (id: string) => {
 
@@ -128,7 +130,7 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
 
     if (!confirm.isConfirmed) return;
 
-    deleteTask.mutate(id);
+    deleteTask(id);
   };
 
   const handleMarkComplete = async (id: string) => {
@@ -138,12 +140,11 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
       showCancelButton: true
     });
     if(!confirm.isConfirmed) return;
-    await markTaskAsInProgressById(id);
-    await markTaskAsCompletedById(id);
-    setTaskList(prev =>
-      prev.map(t => t.id === id ? { ...t, status: 'COMPLETED' } : t)
-    );
-    Swal.fire('Completed!', '', 'success');
+    
+    
+    markTaskComplete(id);
+
+
   };
 
   const handleMarkInProgress = async (id: string) => {
@@ -153,11 +154,7 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
       showCancelButton: true
     });
     if(!confirm.isConfirmed) return;
-    await markTaskAsInProgressById(id);
-    setTaskList(prev =>
-      prev.map(t => t.id === id ? { ...t, status: 'IN_PROGRESS' } : t)
-    );
-    Swal.fire('Completed!', '', 'success');
+    markTaskInProgress(id);
   };
 
   const handleEditTask = (task: TaskResponseDto) => {
@@ -182,22 +179,9 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
         });
         try{
           
-          const updated = await updateTaskById(taskToEdit.id, data);
+          updateTask({taskId: taskToEdit.id , updatedData: data});
           Swal.close();
-          setTaskList(prev =>
-            prev.map(t => (t.id === taskToEdit.id ? updated : t))
-          );
-          await Swal.fire({
-              icon: 'success',
-              title: 'Successful!',
-              background: '#fff',
-              color: '#000000',
-              timer: 3500,
-              timerProgressBar: true,
-              customClass: {
-                popup: 'border border-gray-700'
-              }
-            });
+          
 
         }catch(err:unknown){
           if(err instanceof Error){
@@ -230,29 +214,18 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
 
        try{
 
-           const payload: TaskRequestDto = {
+        const payload: TaskRequestDto = {
           ...data,
           dueDate: new Date(data.dueDate),
           userId: userId!
         };
         
-        const created = await registerNewTask(payload);
-
-        setTaskList(prev => [created, ...prev]);
+        saveTask(payload);
+       
 
         Swal.close();
 
-        await Swal.fire({
-              icon: 'success',
-              title: 'Successful!',
-              background: '#fff',
-              color: '#000000',
-              timer: 3500,
-              timerProgressBar: true,
-              customClass: {
-                popup: 'border border-gray-700'
-              }
-            });
+       
       }catch(err: unknown){
         if(err instanceof Error){
           Swal.fire({

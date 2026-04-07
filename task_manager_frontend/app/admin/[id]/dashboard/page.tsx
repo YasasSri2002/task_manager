@@ -10,7 +10,7 @@ import { getUserById } from "@/services/user/getByid";
 import { getAllTasks } from "@/services/task/getAllTasks";
 import AdminRegistrationModal from "../../register-admin/page";
 import { AddAdminSection } from "./addAdminSection";
-import { useTasks } from "@/hooks/useTasks";
+import { useGetAllTasks } from "@/hooks/useTasks";
 
 export default function AdminDashboardPage(){
     const params = useParams();
@@ -18,7 +18,7 @@ export default function AdminDashboardPage(){
     const[userData,setUserData] =useState<UserResponseDto>();
     const[role,setRole] = useState("ADMIN");
     const[showRegisterForm,setShowRegisterForm] = useState(false);
-    const{data: tasksList=[], isLoading, error} = useTasks();
+    const{data: tasksList=[], isLoading, error} = useGetAllTasks();
 
     useEffect(() => {
         const fetchUser = async () => {
