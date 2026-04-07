@@ -19,12 +19,9 @@ import Cookies from 'js-cookie';
 import { useMutation } from '@tanstack/react-query';
 import { useDeleteTask, useMarkTaskAsInProgress, useMarkTaskCompleteById, useRegisterNewTask, useUpdateTask } from '@/hooks/useTasks';
 
-interface TasksPageProps {
-  tasks: TaskResponseDto[];
-  userId?: string;
-}
 
-export default function TasksPage({ tasks, userId }: TasksPageProps) {
+
+export default function TasksPage({ tasks }: {tasks: TaskResponseDto[]}) {
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -34,7 +31,7 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
   const page = Number(searchParams.get('page') ?? '1');
   const perPage = Number(searchParams.get('per_page') ?? '10');
 
-  const [taskList, setTaskList] = useState<TaskResponseDto[]>(tasks);
+ 
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState<TaskResponseDto | undefined>();
 
@@ -59,9 +56,7 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
   const {mutate: updateTask} =useUpdateTask();
   const {mutate: saveTask} = useRegisterNewTask();
 
-  useEffect(() => {
-    setTaskList(tasks);
-  }, [tasks]);
+ 
 
   // callback — reads searchParams via ref, not as a dependency
   const resetPage = useCallback(() => {
@@ -80,7 +75,7 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
 
   const filteredTasks = useMemo(() => {
 
-    let result = [...taskList];
+    let result = [...tasks];
 
     if (statusFilter) {
       result = result.filter(t => t.status === statusFilter);
@@ -110,7 +105,7 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
 
     return result;
 
-  }, [taskList, statusFilter, priorityFilter, sortBy, sortOrder]);
+  }, [tasks, statusFilter, priorityFilter, sortBy, sortOrder]);
 
   const paginatedTasks = useMemo(() => {
     return filteredTasks.slice((page - 1) * perPage, page * perPage);
@@ -274,8 +269,8 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
               Filters
             </div>
 
-            {userId && (
-              <button
+           
+            <button
                 onClick={() => {
                   setTaskToEdit(undefined);
                   setShowTaskForm(true);
@@ -284,8 +279,8 @@ export default function TasksPage({ tasks, userId }: TasksPageProps) {
               >
                 <DynamicIcon name="FaPlus" />
                 New Task
-              </button>
-            )}
+            </button>
+            
 
           </div>
 

@@ -1,4 +1,5 @@
 import { TaskFormData, TaskRequestDto } from "@/dto/taskDto";
+import { getAllTasksQueryOption, getTasksByUserIdQueryOption } from "@/queryOptions/tasksQueryOptions";
 import { deleteTaskByid } from "@/services/task/deleteTaskByid";
 import { getAllTasks } from "@/services/task/getAllTasks";
 import { getTaskByUserId } from "@/services/task/getTaskByUserId";
@@ -12,17 +13,11 @@ import Swal from "sweetalert2";
 
 
 export const useGetAllTasks = ()=> {
-    return useQuery({
-        queryKey: ['taskList'] , 
-        queryFn: getAllTasks 
-    })
+    return useQuery(getAllTasksQueryOption());
 }
 
 export const useGetTasksByUserId= ()=>{
-    return useQuery({
-        queryKey: ['tasksOfAUser'],
-        queryFn: ()=> getTaskByUserId()
-    })
+    return useQuery(getTasksByUserIdQueryOption())
 }
 
 export const useMarkTaskCompleteById = ()=>{

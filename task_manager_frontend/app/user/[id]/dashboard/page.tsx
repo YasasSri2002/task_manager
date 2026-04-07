@@ -42,7 +42,7 @@ function UserDashboardPageContent() {
     
         <main>
             <Navbar username={userData.username} role={role} />     
-            <TasksPage userId={id} tasks={TaskResponseDtolist ?? []}/>
+            <TasksPage tasks={TaskResponseDtolist ?? []}/>
         </main>
     );
 }

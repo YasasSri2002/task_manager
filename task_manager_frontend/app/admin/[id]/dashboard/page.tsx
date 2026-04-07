@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { UserResponseDto } from "@/dto/user";
 import Cookies from "js-cookie";
 import { getUserById } from "@/services/user/getByid";
-import { getAllTasks } from "@/services/task/getAllTasks";
+
 import AdminRegistrationModal from "../../register-admin/page";
 import { AddAdminSection } from "./addAdminSection";
 import { useGetAllTasks } from "@/hooks/useTasks";
@@ -41,7 +41,7 @@ export default function AdminDashboardPage(){
                 {
                     role == "SUPER_ADMIN" && <AddAdminSection showForm={setShowRegisterForm}/>
                 }
-                <TasksPage userId={id} tasks={tasksList}/> 
+                <TasksPage tasks={tasksList}/> 
             </main>
             {showRegisterForm && (
                     <AdminRegistrationModal
