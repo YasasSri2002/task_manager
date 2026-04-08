@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { TaskStatus, TaskPriority, SortField, SortOrder } from '@/types/task';
+import { TaskStatus, TaskPriority, SortField, SortOrder, TasksPageProps } from '@/types/task';
 import { TaskResponseDto, TaskFormData, TaskRequestDto } from '@/dto/taskDto';
 import TaskCard from './taskCard';
 import DynamicIcon from '@/utill/DynamicIcon';
@@ -10,18 +10,14 @@ import PaginationControls from '@/utill/PaginationControls';
 import Swal from 'sweetalert2';
 import TaskForm from './taskForm';
 
-import { deleteTaskByid } from '@/services/task/deleteTaskByid';
-import { updateTaskById } from '@/services/task/updateTaskByid';
-import { registerNewTask } from '@/services/task/registerANewTask';
-import { markTaskAsCompletedById } from '@/services/task/markTaskAsCompletedById';
-import { markTaskAsInProgressById } from '@/services/task/markTaskAsInProgress';
 import Cookies from 'js-cookie';
-import { useMutation } from '@tanstack/react-query';
+
 import { useDeleteTask, useMarkTaskAsInProgress, useMarkTaskCompleteById, useRegisterNewTask, useUpdateTask } from '@/hooks/useTasks';
+import { Page } from '@/types/page';
 
 
 
-export default function TasksPage({ tasks }: {tasks: TaskResponseDto[]}) {
+export default function TasksPage({ tasks }: {tasks: TasksPageProps}) {
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -43,11 +39,8 @@ export default function TasksPage({ tasks }: {tasks: TaskResponseDto[]}) {
     searchParamsRef.current = searchParams;
   }, [searchParams]);
 
-  // Filters
-  const [statusFilter, setStatusFilter] = useState<TaskStatus | ''>('');
-  const [priorityFilter, setPriorityFilter] = useState<TaskPriority | ''>('');
-  const [sortBy, setSortBy] = useState<SortField>('dueDate');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  
+  
 
   //api hooks
   const{mutate: markTaskComplete} = useMarkTaskCompleteById();
@@ -69,49 +62,13 @@ export default function TasksPage({ tasks }: {tasks: TaskResponseDto[]}) {
     router.replace(`${pathname}?${params.toString()}`);
   }, [pathname, router]); // searchParams intentionally omitted — read via ref
 
-  useEffect(() => {
-    resetPage();
-  }, [statusFilter, priorityFilter, sortBy, sortOrder, resetPage]);
+ 
 
-  const filteredTasks = useMemo(() => {
+ 
 
-    let result = [...tasks];
+  const paginatedTasks = tasks.tasks
 
-    if (statusFilter) {
-      result = result.filter(t => t.status === statusFilter);
-    }
-
-    if (priorityFilter) {
-      result = result.filter(t => t.priority === priorityFilter);
-    }
-
-    result.sort((a, b) => {
-
-      if (sortBy === 'dueDate') {
-        const dateA = new Date(a.dueDate).getTime();
-        const dateB = new Date(b.dueDate).getTime();
-        return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
-      }
-
-      if (sortBy === 'priority') {
-        const weight = { LOW: 1, MEDIUM: 2, HIGH: 3 };
-        return sortOrder === 'asc'
-          ? weight[a.priority as keyof typeof weight] - weight[b.priority as keyof typeof weight]
-          : weight[b.priority as keyof typeof weight] - weight[a.priority as keyof typeof weight];
-      }
-
-      return 0;
-    });
-
-    return result;
-
-  }, [tasks, statusFilter, priorityFilter, sortBy, sortOrder]);
-
-  const paginatedTasks = useMemo(() => {
-    return filteredTasks.slice((page - 1) * perPage, page * perPage);
-  }, [filteredTasks, page, perPage]);
-
-  const total = filteredTasks.length;
+  
 
   
 
@@ -245,12 +202,14 @@ export default function TasksPage({ tasks }: {tasks: TaskResponseDto[]}) {
     }
   };
 
-  const toggleSortOrder = () =>
-    setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
+  const toggleSortOrder = () => {
+  const newOrder = tasks.sortOrder === 'asc' ? 'desc' : 'asc';
+    tasks.onSortOrderChange(newOrder); // pass the new value directly
+  };
 
   const clearFilters = () => {
-    setStatusFilter('');
-    setPriorityFilter('');
+    tasks.onStatusChange('');
+    tasks.onPriorityChange('');
   };
 
   return (
@@ -288,8 +247,8 @@ export default function TasksPage({ tasks }: {tasks: TaskResponseDto[]}) {
           <div className="grid md:grid-cols-4 gap-4">
             
               <select
-              value={statusFilter}
-              onChange={e => setStatusFilter(e.target.value as TaskStatus | '')}
+              value={tasks.statusFilter}
+              onChange={e => tasks.onStatusChange(e.target.value as TaskStatus | '')}
               className="shadow-md rounded p-2"
             >
               <option value="">All Status</option>
@@ -301,8 +260,8 @@ export default function TasksPage({ tasks }: {tasks: TaskResponseDto[]}) {
             
 
             <select
-              value={priorityFilter}
-              onChange={e => setPriorityFilter(e.target.value as TaskPriority | '')}
+              value={tasks.priorityFilter}
+              onChange={e => tasks.onPriorityChange(e.target.value as TaskPriority | '')}
               className="shadow-md rounded p-2"
             >
               <option value="">All Priority</option>
@@ -312,8 +271,8 @@ export default function TasksPage({ tasks }: {tasks: TaskResponseDto[]}) {
             </select>
 
             <select
-              value={sortBy}
-              onChange={e => setSortBy(e.target.value as SortField)}
+              value={tasks.sortBy}
+              onChange={e => tasks.onSortChange(e.target.value as SortField)}
               className="shadow-md rounded p-2"
             >
               <option value="dueDate">Due Date</option>
@@ -325,12 +284,12 @@ export default function TasksPage({ tasks }: {tasks: TaskResponseDto[]}) {
               className="shadow-md rounded p-2 flex items-center gap-2"
             >
               <DynamicIcon name='LuArrowUpDown' className='w-4 h-4 mr-4'></DynamicIcon>
-              {sortOrder === 'asc' ? 'Ascending' : 'Descending'}
+              {tasks.sortOrder === 'asc' ? 'Ascending' : 'Descending'}
             </button>
 
           </div>
 
-          {(statusFilter || priorityFilter) && (
+          {(tasks.statusFilter || tasks.priorityFilter) && (
             <button
               onClick={clearFilters}
               className="text-blue-600 text-sm mt-3"
@@ -342,7 +301,7 @@ export default function TasksPage({ tasks }: {tasks: TaskResponseDto[]}) {
         </div>
 
         {/* Task list */}
-        {filteredTasks.length === 0 ? (
+        {paginatedTasks.length === 0 ? (
 
           <div className="bg-white rounded-lg p-10 text-center">
             No tasks found
@@ -368,13 +327,13 @@ export default function TasksPage({ tasks }: {tasks: TaskResponseDto[]}) {
             <div className='flex justify-between items-center'>
               <div className="">
                 <p className='text-sm md:text-lg text-gray-600'>
-                  showing page {page} of total page {Math.ceil(total/perPage)}
+                  showing page {tasks.page} of total page {tasks.totalPages}
                 </p>
               </div>
                 <PaginationControls
-                hasNextPage={page * perPage < total}
-                hasPrevPage={page > 1}
-                endPage={total}
+                hasNextPage={tasks.page < tasks.totalPages}
+                hasPrevPage={tasks.page > 1}
+                endPage={tasks.totalPages}
                 perPageNumber={String(perPage)}
                 routerPath={pathname.replace(/^\//, '')}
               />

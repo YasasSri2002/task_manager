@@ -1,21 +1,27 @@
 import { TaskResponseDto } from "@/dto/taskDto";
 import { getAllTasks } from "@/services/task/getAllTasks";
 import { getTaskByUserId } from "@/services/task/getTaskByUserId";
+import { Page } from "@/types/page";
 import { UseQueryOptions } from "@tanstack/react-query";
 
-export function getAllTasksQueryOption(): UseQueryOptions<TaskResponseDto[],Error>{
+export function getAllTasksQueryOption(
+    page:number, size:number, status:string, priority:string, sortBy:string, orderBy:string
+    
+): UseQueryOptions<Page<TaskResponseDto>,Error>{
     return {
-        queryKey: ['taskList'] , 
-        queryFn: getAllTasks,
+        queryKey: ['taskList',page,size,status,priority,sortBy,orderBy] , 
+        queryFn: ()=>getAllTasks(page,size,status,priority,sortBy,orderBy),
         staleTime: 1000 * 60 * 5,
         gcTime: 1000 * 60 * 10 ,
+        refetchOnWindowFocus: false
     }
 }
 
-export function getTasksByUserIdQueryOption(): UseQueryOptions<TaskResponseDto[],Error>{
+export function getTasksByUserIdQueryOption(page:number,size:number,status:string,priority: string,sortBy:string,orderBy:string)
+: UseQueryOptions<Page<TaskResponseDto>,Error>{
     return {
-        queryKey: ['tasksOfAUser'],
-        queryFn: getTaskByUserId,
+        queryKey: ['tasksOfAUser',page,size,status,priority,sortBy,orderBy],
+        queryFn: ()=> getTaskByUserId(page,size,status,priority,sortBy,orderBy),
         staleTime: 1000 *60 *5,
         gcTime: 1000 * 60 * 10,
         refetchOnWindowFocus: false,

@@ -12,6 +12,8 @@ import Cookies from "js-cookie";
 import { useGetTasksByUserId } from "@/hooks/useTasks";
 
 import { useUserData } from "@/hooks/useUser";
+import { useState } from "react";
+import { SortField, SortOrder, TaskStatus,TaskPriority } from "@/types/task";
 
 
 
@@ -23,13 +25,18 @@ function UserDashboardPageContent() {
     const params = useParams();
     const id = params.id as string;
 
-    //api hooks
-    const{data: TaskResponseDtolist} = useGetTasksByUserId();
+    
+
+    //filters
+    const [page, setPage] = useState(1);
+    const [statusFilter, setStatusFilter] = useState<TaskStatus | ''>('');
+    const [priorityFilter, setPriorityFilter] = useState<TaskPriority | ''>('');
+    const [sortBy, setSortBy] = useState<SortField>('dueDate');
+    const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
     
     const role = Cookies.get('x-user-role') ?? "";
-
-   
-
+    //api hooks
+    const{data: tasksList} = useGetTasksByUserId(page,10,statusFilter,priorityFilter,sortBy,sortOrder);
     const {data:userData} = useUserData();
     
 
@@ -42,7 +49,20 @@ function UserDashboardPageContent() {
     
         <main>
             <Navbar username={userData.username} role={role} />     
-            <TasksPage tasks={TaskResponseDtolist ?? []}/>
+            <TasksPage tasks={{
+                tasks: tasksList?.content || [],
+                totalPages: tasksList?.totalPages || 1,   // ← add this
+                page: page,
+                onPageChange: setPage,                     // ← add this
+                statusFilter,
+                onStatusChange: setStatusFilter,
+                priorityFilter,
+                onPriorityChange: setPriorityFilter,
+                sortBy,
+                onSortChange: setSortBy,
+                sortOrder,
+                onSortOrderChange: setSortOrder
+            }}/> 
         </main>
     );
 }

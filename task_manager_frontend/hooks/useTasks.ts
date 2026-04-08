@@ -12,12 +12,35 @@ import Swal from "sweetalert2";
 
 
 
-export const useGetAllTasks = ()=> {
-    return useQuery(getAllTasksQueryOption());
+export const useGetAllTasks = (
+    page: number,
+    size: number,
+    status: string,
+    priority:string,
+    sortBy:string,
+    orderBy: string
+)=> {
+    return useQuery(
+        getAllTasksQueryOption(
+            page,
+            size,
+            status,
+            priority,
+            sortBy,
+            orderBy
+        )
+    );
 }
 
-export const useGetTasksByUserId= ()=>{
-    return useQuery(getTasksByUserIdQueryOption())
+export const useGetTasksByUserId= (
+    page: number,
+    size: number,
+    status: string,
+    priority:string,
+    sortBy:string,
+    orderBy: string
+)=>{
+    return useQuery(getTasksByUserIdQueryOption(page,size,status,priority,sortBy,orderBy))
 }
 
 export const useMarkTaskCompleteById = ()=>{

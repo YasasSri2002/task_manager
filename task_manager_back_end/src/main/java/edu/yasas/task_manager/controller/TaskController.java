@@ -7,6 +7,7 @@ import edu.yasas.task_manager.dto.response.TaskResponseDto;
 import edu.yasas.task_manager.entity.TaskEntity;
 import edu.yasas.task_manager.service.TaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,9 +37,16 @@ public class TaskController {
 
     @GetMapping("/by-user-id")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','USER')")
-    public ResponseEntity<List<TaskDto>>getAllByUserId(@AuthenticationPrincipal CustomUserDetail userDetail){
+    public ResponseEntity<Page<TaskDto>>getAllByUserId(
+            @AuthenticationPrincipal CustomUserDetail userDetail,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String priority,
+            @RequestParam(defaultValue = "dueDate") String sortBy,
+            @RequestParam(defaultValue = "asc") String orderBy){
         UUID userId = userDetail.getUserId();
-        return taskService.getAllByUserId(userId);
+        return taskService.getAllByUserId(userId,page, size,sortBy,orderBy,status,priority);
     }
 
     @PutMapping("/mark-as-complete")
@@ -74,8 +82,15 @@ public class TaskController {
     }
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
-    public ResponseEntity<List<TaskResponseDto>>getAllTask(){
-        return taskService.getAllTasks();
+    public ResponseEntity<Page<TaskResponseDto>>getAllTask(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String priority,
+            @RequestParam(defaultValue = "dueDate") String sortBy,
+            @RequestParam(defaultValue = "asc") String orderBy
+    ){
+        return taskService.getAllTasks(page, size,sortBy,orderBy,status,priority);
     }
 
 }

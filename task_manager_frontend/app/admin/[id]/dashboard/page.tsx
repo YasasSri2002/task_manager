@@ -11,26 +11,26 @@ import { getUserById } from "@/services/user/getByid";
 import AdminRegistrationModal from "../../register-admin/page";
 import { AddAdminSection } from "./addAdminSection";
 import { useGetAllTasks } from "@/hooks/useTasks";
+import { SortField, SortOrder, TaskStatus,TaskPriority } from "@/types/task";
+import { useUserData } from "@/hooks/useUser";
 
 export default function AdminDashboardPage(){
-    const params = useParams();
-    const id = params.id as string;
-    const[userData,setUserData] =useState<UserResponseDto>();
-    const[role,setRole] = useState("ADMIN");
+    
     const[showRegisterForm,setShowRegisterForm] = useState(false);
-    const{data: tasksList=[], isLoading, error} = useGetAllTasks();
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            const cookieRole = Cookies.get('x-user-role');
-            const data = await getUserById();
-            setUserData(data);
-            setRole(cookieRole!);
-        };
-        
-        fetchUser();      
-        
-    }, [id]);
+    //filters
+    const [page, setPage] = useState(1);
+    const [statusFilter, setStatusFilter] = useState<TaskStatus | ''>('');
+    const [priorityFilter, setPriorityFilter] = useState<TaskPriority | ''>('');
+    const [sortBy, setSortBy] = useState<SortField>('dueDate');
+    const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+
+    const role = Cookies.get('x-user-role') ?? "";
+    //api
+    const{data: tasksList, isLoading, error} = useGetAllTasks(page,10,statusFilter,priorityFilter,sortBy,sortOrder);
+    const{data: userData}= useUserData();
+
+    
 
     if (!userData || isLoading) return <LoadingScreen message="Fetching user data..." />;
 
@@ -41,7 +41,22 @@ export default function AdminDashboardPage(){
                 {
                     role == "SUPER_ADMIN" && <AddAdminSection showForm={setShowRegisterForm}/>
                 }
-                <TasksPage tasks={tasksList}/> 
+                <TasksPage tasks={{
+                    tasks: tasksList?.content || [],
+                    totalPages: tasksList?.totalPages || 1,   // ← add this
+                    page: page,
+                    onPageChange: setPage,                     // ← add this
+                    statusFilter,
+                    onStatusChange: setStatusFilter,
+                    priorityFilter,
+                    onPriorityChange: setPriorityFilter,
+                    sortBy,
+                    onSortChange: setSortBy,
+                    sortOrder,
+                    onSortOrderChange: setSortOrder
+
+
+                }}/> 
             </main>
             {showRegisterForm && (
                     <AdminRegistrationModal

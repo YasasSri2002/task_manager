@@ -12,6 +12,9 @@ import edu.yasas.task_manager.repository.UserRepository;
 import edu.yasas.task_manager.service.TaskService;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -75,11 +78,11 @@ public class TaskServiceImpl implements TaskService {
         taskEntity.setDueDate(taskRequestDto.getDueDate());
         taskEntity.setCreatedAt(LocalDate.now());
         taskEntity.setUpdatedAt(LocalDate.now());
-        if(taskRequestDto.getStatus().isEmpty()){
+        if( taskRequestDto.getStatus() == null || taskRequestDto.getStatus().isEmpty()){
             taskEntity.setStatus("TODO");
         }else{
             taskEntity.setStatus(taskEntity.getStatus());
-        };
+        }
 
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("user has not found"));
@@ -92,16 +95,38 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public ResponseEntity<List<TaskDto>> getAllByUserId(UUID id) {
+    public ResponseEntity<Page<TaskDto>> getAllByUserId(
+            UUID id,Integer page,Integer size, String sortBy,
+            String orderBy, String status, String priority)
+    {
 
-        ArrayList<TaskDto> taskDtoArrayList = new ArrayList<>();
+        Sort sort = orderBy.equalsIgnoreCase("asc") ?
+                Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
-        Iterable<TaskEntity> allByUserId =
-                taskRepository.findAllByUserEntityId(id);
+        PageRequest pageRequest = PageRequest.of(page, size,sort);
 
-        allByUserId.forEach(taskEntity -> taskDtoArrayList.add(getTaskDto(taskEntity)));
+        Page<TaskEntity>  taskEntityList;
 
-        return ResponseEntity.ok(taskDtoArrayList);
+        boolean hasStatus = status != null && !status.isEmpty();
+        boolean hasPriority = priority != null && !priority.isEmpty();
+
+        if(hasStatus && hasPriority){
+            taskEntityList =
+                    taskRepository.findByUserEntityIdAndStatusAndPriority(
+                            id,status,priority,pageRequest
+                    );
+        }else if(hasStatus){
+            taskEntityList =  taskRepository.findByUserEntityIdAndStatus(id,status,pageRequest);
+        } else if (hasPriority) {
+            taskEntityList = taskRepository.findByUserEntityIdAndPriority(id,priority,pageRequest);
+        }else {
+            taskEntityList = taskRepository.findAllByUserEntityId(id,pageRequest);
+        }
+
+        Page<TaskDto> taskDtos =
+                taskEntityList.map(TaskServiceImpl::getTaskDto);
+
+        return ResponseEntity.ok(taskDtos);
     }
 
     @Override
@@ -180,11 +205,36 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
-    public ResponseEntity<List<TaskResponseDto>> getAllTasks() {
-        ArrayList<TaskResponseDto> taskResponseDtoArrayList = new ArrayList<>();
-        List<TaskEntity> taskEntityList = taskRepository.findAll();
-        taskEntityList.forEach(taskEntity ->
-                taskResponseDtoArrayList.add(getTaskResponseDto(taskEntity)));
-        return ResponseEntity.ok(taskResponseDtoArrayList);
+    public ResponseEntity<Page<TaskResponseDto>> getAllTasks(
+            Integer page, Integer size, String sortBy, String orderBy, String status,
+            String priority
+    ) {
+
+        Sort sort = orderBy.equalsIgnoreCase("asc") ?
+                Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        PageRequest pageRequest = PageRequest.of(page, size,sort);
+
+        Page<TaskEntity>  taskEntityList;
+
+        boolean hasStatus = status != null && !status.isEmpty();
+        boolean hasPriority = priority != null && !priority.isEmpty();
+
+        if(hasStatus && hasPriority ){
+            taskEntityList =
+                    taskRepository.findByStatusAndPriority(status,priority,pageRequest);
+        }else if(hasStatus){
+            taskEntityList =  taskRepository.findByStatus(status,pageRequest);
+        } else if (hasPriority) {
+            taskEntityList = taskRepository.findByPriority(priority,pageRequest);
+        }else {
+            taskEntityList = taskRepository.findAll(pageRequest);
+        }
+
+
+        Page<TaskResponseDto> taskResponseDtos =
+                taskEntityList.map(TaskServiceImpl::getTaskResponseDto);
+
+        return ResponseEntity.ok(taskResponseDtos);
     }
 }
