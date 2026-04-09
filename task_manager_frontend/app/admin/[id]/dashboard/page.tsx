@@ -48,7 +48,7 @@ export default function AdminDashboardPage(){
                 }
                 <TasksPage tasks={{
                     tasks: tasksList?.content || [],
-                    totalPages: tasksList?.totalPages || 1,   // ← add this
+                    totalPages: tasksList?.page.totalPages || 1,   // ← add this
                     page: page,                     // ← add this
                     statusFilter,
                     onStatusChange: setStatusFilter,
