@@ -81,7 +81,7 @@ public class TaskServiceImpl implements TaskService {
         if( taskRequestDto.getStatus() == null || taskRequestDto.getStatus().isEmpty()){
             taskEntity.setStatus("TODO");
         }else{
-            taskEntity.setStatus(taskEntity.getStatus());
+            taskEntity.setStatus(taskRequestDto.getStatus());
         }
 
         UserEntity userEntity = userRepository.findById(userId)
