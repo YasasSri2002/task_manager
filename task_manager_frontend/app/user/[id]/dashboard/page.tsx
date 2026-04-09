@@ -37,7 +37,7 @@ function UserDashboardPageContent() {
     const role = Cookies.get('x-user-role') ?? "";
     //api hooks
     const{data: tasksList} = useGetTasksByUserId(page,10,statusFilter,priorityFilter,sortBy,sortOrder);
-    const {data:userData} = useUserData();
+    const {data:userData} = useUserData(id);
     
 
     

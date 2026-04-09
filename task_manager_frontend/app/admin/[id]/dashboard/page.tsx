@@ -15,6 +15,9 @@ import { SortField, SortOrder, TaskStatus,TaskPriority } from "@/types/task";
 import { useUserData } from "@/hooks/useUser";
 
 export default function AdminDashboardPage(){
+
+    const params = useParams();
+     const id = params.id as string;
     
     const[showRegisterForm,setShowRegisterForm] = useState(false);
 
@@ -28,7 +31,7 @@ export default function AdminDashboardPage(){
     const role = Cookies.get('x-user-role') ?? "";
     //api
     const{data: tasksList, isLoading, error} = useGetAllTasks(page,10,statusFilter,priorityFilter,sortBy,sortOrder);
-    const{data: userData}= useUserData();
+    const{data: userData}= useUserData(id);
 
     
 

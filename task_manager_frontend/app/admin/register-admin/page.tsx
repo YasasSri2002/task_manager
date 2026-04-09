@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { UserRegistrationForm } from "@/app/userRegistrationForm";
 import { useEffect } from "react";
 import { registerNewAdmin } from "@/services/adminRegistration";
+import { useRegisterAdmin } from "@/hooks/useUser";
 
 interface AdminRegistrationModalProps {
   isOpen: boolean;
@@ -12,6 +13,8 @@ interface AdminRegistrationModalProps {
 }
 
 export default function AdminRegistrationModal({ isOpen, onClose }: AdminRegistrationModalProps) {
+
+  const{mutate: registerAdmin} = useRegisterAdmin();
 
   useEffect(() => {
     if (isOpen) {
@@ -30,32 +33,14 @@ export default function AdminRegistrationModal({ isOpen, onClose }: AdminRegistr
       didOpen: () => { Swal.showLoading(); }
     });
     try {
-      await registerNewAdmin(data);
+      registerAdmin(data);
       reset();
       Swal.close();
-      await Swal.fire({
-        icon: 'success',
-        title: 'Registration Successful!',
-        background: '#fff',
-        color: '#000000',
-        confirmButtonColor: '#dc2626',
-        confirmButtonText: 'Go to Login',
-        timer: 2500,
-        timerProgressBar: true,
-        customClass: { popup: 'border border-gray-700' }
-      });
+      
       onClose();
     } catch (err: unknown) {
       console.log(err);
-      Swal.fire({
-        icon: 'error',
-        title: 'Registration Failed',
-        text: err instanceof Error ? err.message : 'An unexpected error occurred.',
-        background: '#fff',
-        color: '#000000',
-        confirmButtonColor: '#dc2626',
-        customClass: { popup: 'border border-gray-700' }
-      });
+      
     }
   }
 
