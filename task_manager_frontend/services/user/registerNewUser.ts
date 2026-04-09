@@ -14,16 +14,24 @@ export async function registerNewUser(data : UserRequestDto) {
   try {
     const response = await axios.post(`${BACKEND_URL}/api/v1/user/persist`, data);
 
+    
+
     return response.data;
+
+    
     
 
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
       const status = error.response?.status;
-      if (status === 401) throw new Error("Invalid username or password");
+      if (status === 401) throw new Error(error.message);
       if (status === 404) throw new Error("User not found");
       if (status === 403) throw new Error("Access denied");
-      throw new Error("Something went wrong, please try again");
+      if (status === 500) throw new Error("Email already in the database");
+      const message = error.response?.data.message;
+      if(message) throw new Error(message);
+
+      throw new Error(error.message);
     }
     throw new Error("An unexpected error occurred");
   }

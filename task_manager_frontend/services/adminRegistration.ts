@@ -30,7 +30,11 @@ export async function registerNewAdmin(data : UserRequestDto) {
       if (status === 401) throw new Error("Invalid username or password");
       if (status === 404) throw new Error("User not found");
       if (status === 403) throw new Error("Access denied");
-      throw new Error("Something went wrong, please try again");
+
+      const message = error.response?.data.message;
+      if(message) throw new Error(message);
+
+      throw new Error(error.message);
     }
     throw new Error("An unexpected error occurred");
   }
