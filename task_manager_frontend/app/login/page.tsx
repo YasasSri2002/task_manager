@@ -3,25 +3,27 @@ import Link from "next/link";
 import Image from "next/image";
 import { FormEvent, useState } from "react";
 import DynamicIcon from "@/utill/DynamicIcon";
-import { login } from "@/services/auth/login/loginService";
+
 import { LoginRequestDto, LoginResponseDto } from "@/dto/login";
 import { jwtDecode } from "jwt-decode";
 import { DecodedToken } from "../../types/decodedToken";
 import { useRouter } from "next/navigation";
 import { LoginFormErrors, loginFormValidateSchema } from "@/lib/schema/loginFormValidateSchema";
+import { useLogin } from "@/hooks/useAuth";
 
 export default function LoginPage(){
 
     const[isPasswordShowing,setIsPasswordShowing] =useState(false);
     const[errorMessage,setErrorMessage] = useState<string|null>(null);
     const[inputValidationError,setInpuValidationError]= useState<LoginFormErrors>({});
-    const[isLoading,setIsLoading] =useState(false);
+    
     const router = useRouter();
+    const{mutateAsync: login,isPending} =useLogin();
 
     async function loginFormSubmit(event: FormEvent<HTMLFormElement>){
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        setIsLoading(true)
+        
         const formValues ={
             username: formData.get('email') as string,
             password: formData.get('password') as string
@@ -43,9 +45,10 @@ export default function LoginPage(){
 
         try{
             setErrorMessage(null)
-            const result: LoginResponseDto = await login(data);
-            let { token} = result;
-            const{ userId} =result;
+             
+            const response =await login(data);
+            
+            let {token, userId} = response;
 
              if (!token) throw new Error("No jwtToken returned");
 
@@ -54,7 +57,7 @@ export default function LoginPage(){
                 token = token.substring(7);
             }
 
-            setIsLoading(false);
+            
 
             // Decode JWT to get roles
             const decoded: DecodedToken = jwtDecode(token);
@@ -146,7 +149,7 @@ export default function LoginPage(){
                     <button type="submit" 
                         className="w-full border border-blue-600 bg-blue-600 py-1 px-4 rounded-md text-white 
                         active:scale-75">
-                       {isLoading ? 'loading...' : 'Sign in' }
+                       {isPending ? 'loading...' : 'Sign in' }
                     </button>
                 </form>
 
