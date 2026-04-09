@@ -14,7 +14,7 @@ export type TasksPageProps = {
   totalPages: number;
 
   page: number;
-  onPageChange: (page: number) => void;
+  
 
   statusFilter: TaskStatus | '';
   onStatusChange: (StatusValue: TaskStatus | '') => void;

@@ -141,13 +141,16 @@ export const useRegisterNewTask = () =>{
     return useMutation({
         mutationFn: async(task: TaskRequestDto)=> {
             await registerNewTask(task);
-        },onSuccess: () =>{
+        },onSuccess: async () =>{
              Swal.fire({
                 icon: "success",
                 title: "Successfully",
                 text: `Task registered is successfully`
             })
-            queryClient.invalidateQueries({queryKey: ['tasksOfAUser']})
+           await Promise.all([ 
+            queryClient.invalidateQueries({queryKey: ['tasksOfAUser']}),
+            queryClient.invalidateQueries({queryKey: ['taskList']})
+         ])
         },onError(error){
             if(error instanceof Error){
                 Swal.fire({

@@ -1,5 +1,5 @@
 'use client'
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import LoadingScreen from "@/components/loadingScreen";
 import { Navbar } from "@/app/navBar";
 import TasksPage from "@/app/task/TaskPage";
@@ -18,11 +18,13 @@ export default function AdminDashboardPage(){
 
     const params = useParams();
      const id = params.id as string;
+     const searchParams = useSearchParams();
+    const page = Number(searchParams.get('page') ?? '1');
     
     const[showRegisterForm,setShowRegisterForm] = useState(false);
 
     //filters
-    const [page, setPage] = useState(1);
+    
     const [statusFilter, setStatusFilter] = useState<TaskStatus | ''>('');
     const [priorityFilter, setPriorityFilter] = useState<TaskPriority | ''>('');
     const [sortBy, setSortBy] = useState<SortField>('dueDate');
@@ -47,8 +49,7 @@ export default function AdminDashboardPage(){
                 <TasksPage tasks={{
                     tasks: tasksList?.content || [],
                     totalPages: tasksList?.totalPages || 1,   // ← add this
-                    page: page,
-                    onPageChange: setPage,                     // ← add this
+                    page: page,                     // ← add this
                     statusFilter,
                     onStatusChange: setStatusFilter,
                     priorityFilter,

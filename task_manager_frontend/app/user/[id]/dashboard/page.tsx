@@ -52,8 +52,7 @@ function UserDashboardPageContent() {
             <TasksPage tasks={{
                 tasks: tasksList?.content || [],
                 totalPages: tasksList?.totalPages || 1,   // ← add this
-                page: page,
-                onPageChange: setPage,                     // ← add this
+                page: page,      
                 statusFilter,
                 onStatusChange: setStatusFilter,
                 priorityFilter,

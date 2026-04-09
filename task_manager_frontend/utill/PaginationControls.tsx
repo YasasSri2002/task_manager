@@ -41,7 +41,7 @@ const PaginationControls: FC<PaginationControlsProps> = (
       </button>
 
       <div className='shrink-0'>
-        {page} / {Math.ceil(endPage / Number(per_page))}
+        {page} / {endPage}
       </div>
 
       <button
